@@ -49,7 +49,12 @@
   ;; project
   "p" '(:which-key "project")
   "pf" '(helm-projectile-find-file :which-key "find file")
-  "pp" '(helm-projectile-switch-project :which-key "switch project")))
+  "pp" '(helm-projectile-switch-project :which-key "switch project")
+
+  ;; git
+  "g" '(magit-status :which-key "magit")))
+
+
 
 
 (use-package material-theme
@@ -106,7 +111,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (general which-key shackle helm-projectile exec-path-from-shell tide web-mode rjsx-mode use-package flycheck helm material-theme elpy evil-leader evil))))
+    (evil-magit general which-key shackle helm-projectile exec-path-from-shell tide web-mode rjsx-mode use-package flycheck helm material-theme elpy evil-leader evil))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

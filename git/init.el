@@ -1,2 +1,5 @@
 (use-package magit
-  :ensure t)
+  :ensure t
+  :commands magit-status)
+
+(use-package evil-magit :ensure t)
