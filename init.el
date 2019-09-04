@@ -59,6 +59,7 @@
 
   ;; window
   "w" '(:which-key "window")
+  "wd" '(delete-window :which-key "delete window")
   "wv" '(split-window-horizontally :which-key "split horizontally")
   "1" '(lambda () (interactive) (winum-select-window-1) :which-key "select first window")
   "2" '(lambda () (interactive) (winum-select-window-2) :which-key "select second window")
