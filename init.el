@@ -17,13 +17,11 @@
   :ensure t
   :config (evil-mode +1))
 
-(use-package paredit
+
+(use-package winum ; window numbering
   :ensure t
   :config
-  (add-hook 'emacs-lisp-mode-hook #'paredit-mode))
-
-
-
+  (winum-mode))
 
 (setq inhibit-startup-screen t)
 (use-package which-key
@@ -31,6 +29,18 @@
   :config
   (which-key-mode)
   (setq which-key-idle-delay 0)) ; show keybinding functions
+
+(defun delete-this-buffer ()
+  ;; kill current buffer
+  (interactive)
+  (kill-buffer (current-buffer)))
+(defun delete-if-file ()
+  ;; delete file and kill buffer
+  (interactive)
+  (if (buffer-file-name)
+      (delete-file (buffer-file-name))
+      (delete-this-buffer)
+    ))
 (use-package general ; keybindings
   :ensure t
   :config
@@ -45,6 +55,20 @@
   "f" '(:which-key "files")
   "ff" '(helm-find-files :which-key "find files")
   "fs" '(save-buffer :which-key "save file")
+  "fd" '(delete-if-file :which-key "delete file")
+
+  ;; window
+  "w" '(:which-key "window")
+  "wv" '(split-window-horizontally :which-key "split horizontally")
+  "1" '(lambda () (interactive) (winum-select-window-1) :which-key "select first window")
+  "2" '(lambda () (interactive) (winum-select-window-2) :which-key "select second window")
+  "3" '(lambda () (interactive) (winum-select-window-3) :which-key "select third window")
+  "4" '(lambda () (interactive) (winum-select-window-4) :which-key "select fourth window")
+
+  ;; buffer
+  "b" '(:which-key "buffer")
+  "bb" '(switch-to-buffer :which-key "list")
+  "bd" '(delete-this-buffer :wich-key "kill")
 
   ;; project
   "p" '(:which-key "project")
@@ -52,13 +76,22 @@
   "pp" '(helm-projectile-switch-project :which-key "switch project")
 
   ;; git
-  "g" '(magit-status :which-key "magit")))
+  "g" '(magit-status :which-key "magit")
 
-
+  ;; help
+  "h" '(:which-key "help")
+  "hf" '(describe-function :which-key "describe function")
+  "hv" '(describe-variable :which-key "describe variable")
+  "hm" '(describe-mode :which-key "describe mode")))
 
 
 (use-package material-theme
   :ensure t)
+
+(use-package paredit
+  :ensure t
+  :config
+  (add-hook 'emacs-lisp-mode-hook #'paredit-mode))
 
 (use-package elpy
   :ensure t
@@ -74,7 +107,8 @@
 (use-package helm
   :ensure t
   :config
-  (helm-mode 1))
+  (helm-mode 1)
+  (define-key helm-map (kbd "TAB") #'helm-execute-persistent-action))
 
 
 ;; Set Super Key to Command
@@ -111,7 +145,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (evil-magit general which-key shackle helm-projectile exec-path-from-shell tide web-mode rjsx-mode use-package flycheck helm material-theme elpy evil-leader evil))))
+    (winum emacs-winum window-numbering evil-magit general which-key shackle helm-projectile exec-path-from-shell tide web-mode rjsx-mode use-package flycheck helm material-theme elpy evil-leader evil))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
