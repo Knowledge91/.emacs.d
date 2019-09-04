@@ -1,0 +1,3 @@
+[submodule "n"]
+	path = evil
+	url = https://github.com/emacs-evil/evil
