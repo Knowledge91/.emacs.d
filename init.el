@@ -31,11 +31,11 @@
   (setq which-key-idle-delay 0)) ; show keybinding functions
 
 (defun delete-this-buffer ()
-  ;; kill current buffer
+  "Kill current buffer."
   (interactive)
   (kill-buffer (current-buffer)))
 (defun delete-if-file ()
-  ;; delete file and kill buffer
+  "Delete file and kill buffer."
   (interactive)
   (if (buffer-file-name)
       (delete-file (buffer-file-name))
@@ -100,19 +100,17 @@
   "h" '(:which-key "help")
   "hf" '(describe-function :which-key "describe function")
   "hv" '(describe-variable :which-key "describe variable")
-  "hm" '(describe-mode :which-key "describe mode")))
+  "hm" '(describe-mode :which-key "describe mode"))
+
+  ;; error
+  "e" '(:which-key "error")
+  "el" '(flycheck-list-errors :which-key "list errors"))
 
 
-(use-package material-theme
-  :ensure t)
-
-(use-package paredit
+(use-package solarized-theme
   :ensure t
   :config
-  (add-hook 'emacs-lisp-mode-hook #'paredit-mode))
-
-
-
+  (load-theme 'solarized-dark t))
 
 (use-package flycheck :ensure t)
 
@@ -150,6 +148,7 @@
 (load (expand-file-name "./git/init.el" user-emacs-directory))
 (load (expand-file-name "./react/init.el" user-emacs-directory))
 (load (expand-file-name "./python/init.el" user-emacs-directory))
+(load (expand-file-name "./lisp/init.el" user-emacs-directory))
 
 
 (custom-set-variables

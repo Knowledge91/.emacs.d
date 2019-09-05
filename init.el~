@@ -100,27 +100,27 @@
   "h" '(:which-key "help")
   "hf" '(describe-function :which-key "describe function")
   "hv" '(describe-variable :which-key "describe variable")
-  "hm" '(describe-mode :which-key "describe mode")))
+  "hm" '(describe-mode :which-key "describe mode"))
+
+  ;; error
+  "e" '(:which-key "error")
+  "el" '(flycheck-list-errors :which-key "list errors"))
 
 
-(use-package material-theme
-  :ensure t)
+(use-package zenburn-theme
+  :ensure t
+  :config
+  (load-theme 'zenburn t))
 
 (use-package paredit
   :ensure t
   :config
   (add-hook 'emacs-lisp-mode-hook #'paredit-mode))
 
-(use-package elpy
-  :ensure t
-  :config
-  (elpy-enable))
 
-(use-package flycheck
-  :ensure t
-  :config
-  (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
-  (add-hook 'elpy-mode-hook 'flycheck-mode))
+
+
+(use-package flycheck :ensure t)
 
 (use-package helm
   :ensure t
@@ -155,6 +155,8 @@
 
 (load (expand-file-name "./git/init.el" user-emacs-directory))
 (load (expand-file-name "./react/init.el" user-emacs-directory))
+(load (expand-file-name "./python/init.el" user-emacs-directory))
+
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -163,7 +165,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (prettier-js prettier winum emacs-winum window-numbering evil-magit general which-key shackle helm-projectile exec-path-from-shell tide web-mode rjsx-mode use-package flycheck helm material-theme elpy evil-leader evil))))
+    (zenburn-theme solarized-theme solarized-dark prettier-js prettier winum emacs-winum window-numbering evil-magit general which-key shackle helm-projectile exec-path-from-shell tide web-mode rjsx-mode use-package flycheck helm material-theme elpy evil-leader evil))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
