@@ -66,6 +66,11 @@
 
   "TAB" '(mode-line-other-buffer :which-key "prev buffer")
 
+  ;; applications
+  "a" '(:which-key "applications")
+  "ad" '(deer :which-key "deer")
+  "ar" '(ranger :which-key "ranger")
+
   ;; files
   "f" '(:which-key "files")
   "ff" '(helm-find-files :which-key "find files")
@@ -78,10 +83,10 @@
   "wd" '(delete-window :which-key "delete window")
   "wv" '(split-window-horizontally :which-key "vertical split")
   "wV" '((lambda () (interactive) (split-window-horizontally) (other-window 1)) :which-key "vertical split and focus")
-  "1" '(lambda () (interactive) (winum-select-window-1) :which-key "select first window")
-  "2" '(lambda () (interactive) (winum-select-window-2) :which-key "select second window")
-  "3" '(lambda () (interactive) (winum-select-window-3) :which-key "select third window")
-  "4" '(lambda () (interactive) (winum-select-window-4) :which-key "select fourth window")
+  "1" '((lambda () (interactive) (winum-select-window-1)) :which-key "select first window")
+  "2" '((lambda () (interactive) (winum-select-window-2)) :which-key "select second window")
+  "3" '((lambda () (interactive) (winum-select-window-3)) :which-key "select third window")
+  "4" '((lambda () (interactive) (winum-select-window-4)) :which-key "select fourth window")
 
   ;; buffer
   "b" '(:which-key "buffer")
@@ -100,17 +105,23 @@
   "h" '(:which-key "help")
   "hf" '(describe-function :which-key "describe function")
   "hv" '(describe-variable :which-key "describe variable")
-  "hm" '(describe-mode :which-key "describe mode"))
+  "hm" '(describe-mode :which-key "describe mode")
 
   ;; error
   "e" '(:which-key "error")
-  "el" '(flycheck-list-errors :which-key "list errors"))
+  "el" '(flycheck-list-errors :which-key "list errors")
+
+  ;; shell
+  "'" '(eshell :which-key "eshell")))
+
 
 
 (use-package solarized-theme
   :ensure t
   :config
   (load-theme 'solarized-dark t))
+
+(use-package ranger :ensure t)
 
 (use-package flycheck :ensure t)
 
@@ -158,7 +169,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (prettier-js prettier winum emacs-winum window-numbering evil-magit general which-key shackle helm-projectile exec-path-from-shell tide web-mode rjsx-mode use-package flycheck helm material-theme elpy evil-leader evil))))
+    (ranger evil-ranger zenburn-theme solarized-theme solarized-dark prettier-js prettier winum emacs-winum window-numbering evil-magit general which-key shackle helm-projectile exec-path-from-shell tide web-mode rjsx-mode use-package flycheck helm material-theme elpy evil-leader evil))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
