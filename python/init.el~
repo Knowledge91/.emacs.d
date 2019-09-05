@@ -1,0 +1,4 @@
+(use-package elpy ; python development environment
+  :ensure t
+  :config
+  (elpy-enable))

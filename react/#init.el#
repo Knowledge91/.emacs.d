@@ -7,10 +7,7 @@
   (exec-path-from-shell-initialize))
 
 (use-package rjsx-mode
-  :ensure t
-  :config
-  (add-hook 'rjsx-mode-hook 'flycheck-mode))
-
+  :ensure t)
 (use-package prettier-js ; indentation
   :ensure t
   :config

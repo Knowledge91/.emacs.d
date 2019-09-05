@@ -17,10 +17,11 @@
   :ensure t
   :config (evil-mode +1))
 
-(use-package paredit
+
+(use-package winum ; window numbering
   :ensure t
   :config
-  (add-hook 'emacs-lisp-mode-hook #'paredit-mode))
+  (winum-mode))
 
 (setq inhibit-startup-screen t)
 (use-package which-key
@@ -40,6 +41,21 @@
       (delete-file (buffer-file-name))
       (delete-this-buffer)
     ))
+;; source: http://steve.yegge.googlepages.com/my-dot-emacs-file
+(defun rename-file-and-buffer (new-name)
+  "Renames both current buffer and file it's visiting to NEW-NAME."
+  (interactive "sNew name: ")
+  (let ((name (buffer-name))
+        (filename (buffer-file-name)))
+    (if (not filename)
+        (message "Buffer '%s' is not visiting a file!" name)
+      (if (get-buffer new-name)
+          (message "A buffer named '%s' already exists!" new-name)
+        (progn
+          (rename-file filename new-name 1)
+          (rename-buffer new-name)
+          (set-visited-file-name new-name)
+          (set-buffer-modified-p nil))))))
 (use-package general ; keybindings
   :ensure t
   :config
@@ -55,10 +71,17 @@
   "ff" '(helm-find-files :which-key "find files")
   "fs" '(save-buffer :which-key "save file")
   "fd" '(delete-if-file :which-key "delete file")
+  "fR" '(rename-file-and-buffer :which-key "rename file")
 
   ;; window
   "w" '(:which-key "window")
-  "wv" '(split-window-horizontally :which-key "split horizontally")
+  "wd" '(delete-window :which-key "delete window")
+  "wv" '(split-window-horizontally :which-key "vertical split")
+  "wV" '((lambda () (interactive) (split-window-horizontally) (other-window 1)) :which-key "vertical split and focus")
+  "1" '(lambda () (interactive) (winum-select-window-1) :which-key "select first window")
+  "2" '(lambda () (interactive) (winum-select-window-2) :which-key "select second window")
+  "3" '(lambda () (interactive) (winum-select-window-3) :which-key "select third window")
+  "4" '(lambda () (interactive) (winum-select-window-4) :which-key "select fourth window")
 
   ;; buffer
   "b" '(:which-key "buffer")
@@ -79,12 +102,14 @@
   "hv" '(describe-variable :which-key "describe variable")
   "hm" '(describe-mode :which-key "describe mode")))
 
-(use-package winum :ensure t)
-
-
 
 (use-package material-theme
   :ensure t)
+
+(use-package paredit
+  :ensure t
+  :config
+  (add-hook 'emacs-lisp-mode-hook #'paredit-mode))
 
 (use-package elpy
   :ensure t
@@ -138,7 +163,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (winum emacs-winum window-numbering evil-magit general which-key shackle helm-projectile exec-path-from-shell tide web-mode rjsx-mode use-package flycheck helm material-theme elpy evil-leader evil))))
+    (prettier-js prettier winum emacs-winum window-numbering evil-magit general which-key shackle helm-projectile exec-path-from-shell tide web-mode rjsx-mode use-package flycheck helm material-theme elpy evil-leader evil))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
