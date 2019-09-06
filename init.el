@@ -103,6 +103,7 @@
 
   ;; help
   "h" '(:which-key "help")
+  "hh" '(info :which-key "help")
   "hf" '(describe-function :which-key "describe function")
   "hv" '(describe-variable :which-key "describe variable")
   "hm" '(describe-mode :which-key "describe mode")
@@ -160,6 +161,7 @@
 (load (expand-file-name "./react/init.el" user-emacs-directory))
 (load (expand-file-name "./python/init.el" user-emacs-directory))
 (load (expand-file-name "./lisp/init.el" user-emacs-directory))
+(load (expand-file-name "./latex.el" user-emacs-directory))
 
 
 (custom-set-variables
