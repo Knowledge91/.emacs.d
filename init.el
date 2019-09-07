@@ -15,7 +15,8 @@
 
 (use-package evil
   :ensure t
-  :config (evil-mode +1))
+  :config
+  (evil-mode +1))
 
 
 (use-package winum ; window numbering
@@ -64,56 +65,59 @@
     :prefix "SPC"
     :non-normal-prefix "C-SPC"
 
-  "TAB" '(mode-line-other-buffer :which-key "prev buffer")
+    "TAB" '(mode-line-other-buffer :which-key "prev buffer")
 
-  ;; applications
-  "a" '(:which-key "applications")
-  "ad" '(deer :which-key "deer")
-  "ar" '(ranger :which-key "ranger")
+    ;; applications
+    "a" '(:which-key "applications")
+    "ad" '(deer :which-key "deer")
+    "ar" '(ranger :which-key "ranger")
 
-  ;; files
-  "f" '(:which-key "files")
-  "ff" '(helm-find-files :which-key "find files")
-  "fs" '(save-buffer :which-key "save file")
-  "fd" '(delete-if-file :which-key "delete file")
-  "fR" '(rename-file-and-buffer :which-key "rename file")
+    ;; files
+    "f" '(:which-key "files")
+    "ff" '(helm-find-files :which-key "find files")
+    "fs" '(save-buffer :which-key "save file")
+    "fd" '(delete-if-file :which-key "delete file")
+    "fR" '(rename-file-and-buffer :which-key "rename file")
 
-  ;; window
-  "w" '(:which-key "window")
-  "wd" '(delete-window :which-key "delete window")
-  "wv" '(split-window-horizontally :which-key "vertical split")
-  "wV" '((lambda () (interactive) (split-window-horizontally) (other-window 1)) :which-key "vertical split and focus")
-  "1" '((lambda () (interactive) (winum-select-window-1)) :which-key "select first window")
-  "2" '((lambda () (interactive) (winum-select-window-2)) :which-key "select second window")
-  "3" '((lambda () (interactive) (winum-select-window-3)) :which-key "select third window")
-  "4" '((lambda () (interactive) (winum-select-window-4)) :which-key "select fourth window")
+    ;; window
+    "w" '(:which-key "window")
+    "wd" '(delete-window :which-key "delete window")
+    "wv" '(split-window-horizontally :which-key "vertical split")
+    "wV" '((lambda () (interactive) (split-window-horizontally) (other-window 1)) :which-key "vertical split and focus")
+    "1" '((lambda () (interactive) (winum-select-window-1)) :which-key "select first window")
+    "2" '((lambda () (interactive) (winum-select-window-2)) :which-key "select second window")
+    "3" '((lambda () (interactive) (winum-select-window-3)) :which-key "select third window")
+    "4" '((lambda () (interactive) (winum-select-window-4)) :which-key "select fourth window")
 
-  ;; buffer
-  "b" '(:which-key "buffer")
-  "bb" '(switch-to-buffer :which-key "list")
-  "bd" '(delete-this-buffer :wich-key "kill")
+    ;; buffer
+    "b" '(:which-key "buffer")
+    "bb" '(switch-to-buffer :which-key "list")
+    "bd" '(delete-this-buffer :wich-key "kill")
 
-  ;; project
-  "p" '(:which-key "project")
-  "pf" '(helm-projectile-find-file :which-key "find file")
-  "pp" '(helm-projectile-switch-project :which-key "switch project")
+    ;; project
+    "p" '(:which-key "project")
+    "pf" '(helm-projectile-find-file :which-key "find file")
+    "pp" '(helm-projectile-switch-project :which-key "switch project")
+    "pt" '(neotree-toggle :which-key "Neotree")
 
-  ;; git
-  "g" '(magit-status :which-key "magit")
+    ;; git
+    "g" '(magit-status :which-key "magit")
 
-  ;; help
-  "h" '(:which-key "help")
-  "hh" '(info :which-key "help")
-  "hf" '(describe-function :which-key "describe function")
-  "hv" '(describe-variable :which-key "describe variable")
-  "hm" '(describe-mode :which-key "describe mode")
+    ;; help
+    "h" '(:which-key "help")
+    "hh" '(info :which-key "help")
+    "hf" '(describe-function :which-key "describe function")
+    "hv" '(describe-variable :which-key "describe variable")
+    "hm" '(describe-mode :which-key "describe mode")
 
-  ;; error
-  "e" '(:which-key "error")
-  "el" '(flycheck-list-errors :which-key "list errors")
+    ;; error
+    "e" '(:which-key "error")
+    "el" '(flycheck-list-errors :which-key "list errors")
+    "ee" '(eval-expression :which-key "eval")
 
-  ;; shell
-  "'" '(eshell :which-key "eshell")))
+    ;; shell
+    "'" '(eshell :which-key "eshell")
+    ";" '(uncomment-region :which-key "uncomment")))
 
 
 
@@ -157,11 +161,14 @@
   (shackle-mode +1)
   (setq shackle-rules '(("\\`\\*helm.*?\\*\\'" :regexp t :align t :ratio 0.4))))
 
+(use-package neotree :ensure t)
+
 (load (expand-file-name "./git/init.el" user-emacs-directory))
 (load (expand-file-name "./react/init.el" user-emacs-directory))
 (load (expand-file-name "./python/init.el" user-emacs-directory))
 (load (expand-file-name "./lisp/init.el" user-emacs-directory))
 (load (expand-file-name "./latex.el" user-emacs-directory))
+(load (expand-file-name "./eshell.el" user-emacs-directory))
 
 
 (custom-set-variables
@@ -171,7 +178,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (ranger evil-ranger zenburn-theme solarized-theme solarized-dark prettier-js prettier winum emacs-winum window-numbering evil-magit general which-key shackle helm-projectile exec-path-from-shell tide web-mode rjsx-mode use-package flycheck helm material-theme elpy evil-leader evil))))
+    (neotree auctex-latexmk ranger evil-ranger zenburn-theme solarized-theme solarized-dark prettier-js prettier winum emacs-winum window-numbering evil-magit general which-key shackle helm-projectile exec-path-from-shell tide web-mode rjsx-mode use-package flycheck helm material-theme elpy evil-leader evil))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
