@@ -33,6 +33,10 @@
   (which-key-mode)
   (setq which-key-idle-delay 0)) ; show keybinding functions
 
+#+END_SRC
+
+* Keybinding
+#+BEGIN_SRC emacs-lisp
 (defun delete-this-buffer ()
   "Kill current buffer."
   (interactive)
@@ -95,6 +99,7 @@
     "b" '(:which-key "buffer")
     "bb" '(switch-to-buffer :which-key "list")
     "bd" '(delete-this-buffer :wich-key "kill")
+    "br" '(rename-buffer :which-key "rename")
 
     ;; project
     "p" '(:which-key "project")
@@ -257,6 +262,6 @@
     :general(
       :states '(normal)
       :prefix ","
-      "b" '((lambda () (interactive) (TeX-command "LatexMk" 'TeX-master-file -1)) :which-key "build")))
+      "b" '((lambda () (interactive) (TeX-command "LaTeX" 'TeX-master-file -1)) :which-key "build")))
 
 #+END_SRC
