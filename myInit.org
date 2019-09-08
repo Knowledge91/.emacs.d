@@ -1,22 +1,25 @@
-(setq package-enable-at-startup nil) ; tells emacs not to load any packages before starting up
-;; the following lines tell emacs where on the internet to look up
-;; for new packages.
-(setq package-archives '(("org"       . "http://orgmode.org/elpa/")
-                         ("gnu"       . "http://elpa.gnu.org/packages/")
-                         ("melpa"     . "https://melpa.org/packages/")
-                         ("marmalade" . "http://marmalade-repo.org/packages/")))
-(package-initialize) ; guess what this one does ?
+#+STARTUP: overview
 
-;; Bootstrap `use-package'
-(unless (package-installed-p 'use-package) ; unless it is already installed
-  (package-refresh-contents) ; updage packages archive
-  (package-install 'use-package)) ; and install the most recent version of use-package
-(require 'use-package)
-
+* EVIL
+#+BEGIN_SRC emacs-lisp
+(setq inhibit-startup-screen t)
 (use-package evil
   :ensure t
   :config
   (evil-mode +1))
+ 
+(fset 'yes-or-no-p 'y-or-n-p)
+
+;; Set exec path from shell
+(use-package exec-path-from-shell :ensure t
+  :demand
+  :config
+  (exec-path-from-shell-initialize))
+
+(use-package org-bullets
+  :ensure t
+  :config
+  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
 
 
 (use-package winum ; window numbering
@@ -24,7 +27,6 @@
   :config
   (winum-mode))
 
-(setq inhibit-startup-screen t)
 (use-package which-key
   :ensure t
   :config
@@ -98,7 +100,7 @@
     "p" '(:which-key "project")
     "pf" '(helm-projectile-find-file :which-key "find file")
     "pp" '(helm-projectile-switch-project :which-key "switch project")
-    "pt" '(neo)
+    "pt" '(neotree-toggle :which-key "Neotree")
 
     ;; git
     "g" '(magit-status :which-key "magit")
@@ -109,18 +111,20 @@
     "hf" '(describe-function :which-key "describe function")
     "hv" '(describe-variable :which-key "describe variable")
     "hm" '(describe-mode :which-key "describe mode")
+    "hk" '(describe-key :which-key "describe key")
 
     ;; error
     "e" '(:which-key "error")
     "el" '(flycheck-list-errors :which-key "list errors")
 
     ;; emacs
-    ";" '(eval-expression :which-key "eval")
+    "q" '(:which-key "emacs")
+    "qe" '(eval-expression :which-key "eval")
+    "qq" '(save-buffers-kill-terminal :which-key "close")
 
     ;; shell
-    "'" '(eshell :which-key "eshell")))
-
-
+    "'" '((lambda () (interactive) (ansi-term "/usr/local/bin/zsh")) :which-key "shell")
+    ";" '(uncomment-region :which-key "uncomment")))
 
 (use-package solarized-theme
   :ensure t
@@ -164,25 +168,95 @@
 
 (use-package neotree :ensure t)
 
+(use-package pdf-tools
+  :ensure t
+  :config
+  (pdf-tools-install))
+#+END_SRC
+
+* Javascript
+** Normal
+#+BEGIN_SRC emacs-lisp
+(use-package prettier-js ; indentation
+  :ensure t
+  :config
+  (add-hook 'js2-mode-hook 'prettier-js-mode))
+
+(use-package company
+  :ensure t
+  :config
+  (setq company-minimum-prefix-length 1)
+  :hook
+  (after-init . global-company-mode))
+
+
+(defun setup-tide-mode ()
+  (interactive)
+  (tide-setup)
+  (flycheck-mode +1)
+  (setq flycheck-check-syntax-automatically '(save mode-enabled))
+  (eldoc-mode +1)
+  (tide-hl-identifier-mode +1)
+  (company-mode +1))
+
+(use-package typescript-mode
+  :ensure t
+  :init
+  (setq typescript-indent-level 2))
+
+(use-package tide
+  :ensure t
+  :mode ("\\.ts\\'" . 'typescript-mode)
+  :config
+  (add-hook 'before-save-hook #'tide-format-before-save)
+  (add-hook 'typescript-mode-hook #'setup-tide-mode #'electric-pair-mode)
+  (setq tide-format-options '(:indentSize 2 :tabSize 2)))
+
+#+END_SRC
+
+** React
+#+BEGIN_SRC
+(use-package rjsx-mode
+  :ensure t
+  :mode "\\.jsx\\'"
+  :config
+  (add-hook 'rjsx-mode-hook 'flycheck-mode))
+
+
+(setq company-tooltip-align-annotations t)
+
+
 (load (expand-file-name "./git/init.el" user-emacs-directory))
-(load (expand-file-name "./react/init.el" user-emacs-directory))
 (load (expand-file-name "./python/init.el" user-emacs-directory))
 (load (expand-file-name "./lisp/init.el" user-emacs-directory))
-(load (expand-file-name "./latex.el" user-emacs-directory))
-(load (expand-file-name "./eshell.el" user-emacs-directory))
+;; (load (expand-file-name "./eshell.el" user-emacs-directory))
 
 
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   (quote
-    (neotree auctex-latexmk ranger evil-ranger zenburn-theme solarized-theme solarized-dark prettier-js prettier winum emacs-winum window-numbering evil-magit general which-key shackle helm-projectile exec-path-from-shell tide web-mode rjsx-mode use-package flycheck helm material-theme elpy evil-leader evil))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
+;(use-package evil-collection
+;  :ensure t
+;  :custom (evil-collection-setup-minibuffer t)
+;  :init (evil-collection-init))
+
+
+#+END_SRC
+
+* Latex
+#+BEGIN_SRC emacs-lisp
+  (use-package tex
+    :mode "//.tex//'"
+    :ensure auctex
+    :ensure auctex-latexmk
+    :config
+    (setq TeX-auto-save t)
+    (setq TeX-parse-self t)
+    (setq TeX-auto-save t)
+    (setq TeX-PDF-mode t)
+    (setq TeX-engine 'luatex)
+    (auctex-latexmk-setup)
+    (add-hook 'TeX-mode-hook 'flyspell-mode)
+    :general(
+      :states '(normal)
+      :prefix ","
+      "b" '((lambda () (interactive) (TeX-command "LatexMk" 'TeX-master-file -1)) :which-key "build")))
+
+#+END_SRC

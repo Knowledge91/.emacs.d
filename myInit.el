@@ -1,0 +1,222 @@
+(setq inhibit-startup-screen t)
+(use-package evil
+  :ensure t
+  :config
+  (evil-mode +1))
+ 
+(fset 'yes-or-no-p 'y-or-n-p)
+
+;; Set exec path from shell
+(use-package exec-path-from-shell :ensure t
+  :demand
+  :config
+  (exec-path-from-shell-initialize))
+
+(use-package org-bullets
+  :ensure t
+  :config
+  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+
+
+(use-package winum ; window numbering
+  :ensure t
+  :config
+  (winum-mode))
+
+(use-package which-key
+  :ensure t
+  :config
+  (which-key-mode)
+  (setq which-key-idle-delay 0)) ; show keybinding functions
+
+(defun delete-this-buffer ()
+  "Kill current buffer."
+  (interactive)
+  (kill-buffer (current-buffer)))
+(defun delete-if-file ()
+  "Delete file and kill buffer."
+  (interactive)
+  (if (buffer-file-name)
+      (delete-file (buffer-file-name))
+      (delete-this-buffer)
+    ))
+;; source: http://steve.yegge.googlepages.com/my-dot-emacs-file
+(defun rename-file-and-buffer (new-name)
+  "Renames both current buffer and file it's visiting to NEW-NAME."
+  (interactive "sNew name: ")
+  (let ((name (buffer-name))
+        (filename (buffer-file-name)))
+    (if (not filename)
+        (message "Buffer '%s' is not visiting a file!" name)
+      (if (get-buffer new-name)
+          (message "A buffer named '%s' already exists!" new-name)
+        (progn
+          (rename-file filename new-name 1)
+          (rename-buffer new-name)
+          (set-visited-file-name new-name)
+          (set-buffer-modified-p nil))))))
+(use-package general ; keybindings
+  :ensure t
+  :config
+  (general-define-key
+    :states '(normal visual insert emacs)
+    :prefix "SPC"
+    :non-normal-prefix "C-SPC"
+
+    "TAB" '(mode-line-other-buffer :which-key "prev buffer")
+
+    ;; applications
+    "a" '(:which-key "applications")
+    "ad" '(deer :which-key "deer")
+    "ar" '(ranger :which-key "ranger")
+
+    ;; files
+    "f" '(:which-key "files")
+    "ff" '(helm-find-files :which-key "find files")
+    "fs" '(save-buffer :which-key "save file")
+    "fd" '(delete-if-file :which-key "delete file")
+    "fR" '(rename-file-and-buffer :which-key "rename file")
+
+    ;; window
+    "w" '(:which-key "window")
+    "wd" '(delete-window :which-key "delete window")
+    "wv" '(split-window-horizontally :which-key "vertical split")
+    "wV" '((lambda () (interactive) (split-window-horizontally) (other-window 1)) :which-key "vertical split and focus")
+    "1" '((lambda () (interactive) (winum-select-window-1)) :which-key "select first window")
+    "2" '((lambda () (interactive) (winum-select-window-2)) :which-key "select second window")
+    "3" '((lambda () (interactive) (winum-select-window-3)) :which-key "select third window")
+    "4" '((lambda () (interactive) (winum-select-window-4)) :which-key "select fourth window")
+
+    ;; buffer
+    "b" '(:which-key "buffer")
+    "bb" '(switch-to-buffer :which-key "list")
+    "bd" '(delete-this-buffer :wich-key "kill")
+
+    ;; project
+    "p" '(:which-key "project")
+    "pf" '(helm-projectile-find-file :which-key "find file")
+    "pp" '(helm-projectile-switch-project :which-key "switch project")
+    "pt" '(neotree-toggle :which-key "Neotree")
+
+    ;; git
+    "g" '(magit-status :which-key "magit")
+
+    ;; help
+    "h" '(:which-key "help")
+    "hh" '(info :which-key "help")
+    "hf" '(describe-function :which-key "describe function")
+    "hv" '(describe-variable :which-key "describe variable")
+    "hm" '(describe-mode :which-key "describe mode")
+    "hk" '(describe-key :which-key "describe key")
+
+    ;; error
+    "e" '(:which-key "error")
+    "el" '(flycheck-list-errors :which-key "list errors")
+
+    ;; emacs
+    "q" '(:which-key "emacs")
+    "qe" '(eval-expression :which-key "eval")
+    "qq" '(save-buffers-kill-terminal :which-key "close")
+
+    ;; shell
+    "'" '((lambda () (interactive) (ansi-term "/usr/local/bin/zsh")) :which-key "shell")
+    ";" '(uncomment-region :which-key "uncomment")))
+
+(use-package solarized-theme
+  :ensure t
+  :config
+  (load-theme 'solarized-dark t))
+
+(use-package ranger :ensure t)
+
+(use-package flycheck :ensure t)
+
+(use-package helm
+  :ensure t
+  :config
+  (helm-mode 1)
+  (define-key helm-map (kbd "TAB") #'helm-execute-persistent-action))
+
+
+;; Set Super Key to Command
+(setq ns-command-modifier 'super)
+
+;; Project Organisation
+(use-package projectile
+  :ensure t
+  :config
+  (setq projectile-indexing-method 'alien) ; use external cmds find and git to index files
+  (define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
+  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+  (projectile-mode +1))
+
+(use-package helm-projectile ; Open Projectile in Helm
+  :ensure t
+  :config
+  (setq projectile-completion-system 'helm)
+  (helm-projectile-on))
+
+(use-package shackle ; Helm window always bottom
+  :ensure t
+  :config
+  (shackle-mode +1)
+  (setq shackle-rules '(("\\`\\*helm.*?\\*\\'" :regexp t :align t :ratio 0.4))))
+
+(use-package neotree :ensure t)
+
+(use-package pdf-tools
+  :ensure t
+  :config
+  (pdf-tools-install))
+
+(use-package prettier-js ; indentation
+  :ensure t
+  :config
+  (add-hook 'js2-mode-hook 'prettier-js-mode))
+
+(use-package company
+  :ensure t
+  :config
+  (setq company-minimum-prefix-length 1)
+  :hook
+  (after-init . global-company-mode))
+
+
+(defun setup-tide-mode ()
+  (interactive)
+  (tide-setup)
+  (flycheck-mode +1)
+  (setq flycheck-check-syntax-automatically '(save mode-enabled))
+  (eldoc-mode +1)
+  (tide-hl-identifier-mode +1)
+  (company-mode +1))
+
+(use-package typescript-mode
+  :ensure t
+  :init
+  (setq typescript-indent-level 2))
+
+(use-package tide
+  :ensure t
+  :mode ("\\.ts\\'" . 'typescript-mode)
+  :config
+  (add-hook 'before-save-hook #'tide-format-before-save)
+  (add-hook 'typescript-mode-hook #'setup-tide-mode #'electric-pair-mode)
+  (setq tide-format-options '(:indentSize 2 :tabSize 2)))
+
+(use-package tex
+  :mode "//.tex//'"
+  :ensure auctex
+  :ensure auctex-latexmk
+  :config
+  (setq TeX-auto-save t)
+  (setq TeX-parse-self t)
+  (setq TeX-auto-save t)
+  (setq TeX-PDF-mode t)
+  (setq TeX-engine 'luatex)
+  (auctex-latexmk-setup)
+  (add-hook 'TeX-mode-hook 'flyspell-mode)
+  :general(
+    :states '(normal)
+    :prefix ","
+    "b" '((lambda () (interactive) (TeX-command "LatexMk" 'TeX-master-file -1)) :which-key "build")))
