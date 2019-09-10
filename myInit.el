@@ -1,3 +1,5 @@
+(column-number-mode 1)
+
 (setq inhibit-startup-screen t)
 (use-package evil
   :ensure t
@@ -91,6 +93,7 @@
     "b" '(:which-key "buffer")
     "bb" '(switch-to-buffer :which-key "list")
     "bd" '(delete-this-buffer :wich-key "kill")
+    "br" '(rename-buffer :which-key "rename")
 
     ;; project
     "p" '(:which-key "project")
@@ -204,6 +207,10 @@
   (add-hook 'typescript-mode-hook #'setup-tide-mode #'electric-pair-mode)
   (setq tide-format-options '(:indentSize 2 :tabSize 2)))
 
+(use-package json-mode
+  :mode "\\.json\\'"
+  :ensure t)
+
 (use-package tex
   :mode "//.tex//'"
   :ensure auctex
@@ -219,4 +226,6 @@
   :general(
     :states '(normal)
     :prefix ","
-    "b" '((lambda () (interactive) (TeX-command "LatexMk" 'TeX-master-file -1)) :which-key "build")))
+    "b" '((lambda () (interactive) (TeX-command "LaTeX" 'TeX-master-file -1)) :which-key "build")))
+
+(use-package gist :ensure t)
