@@ -119,6 +119,7 @@
 
       ;; project
       "p" '(:which-key "project")
+      "pd" '(projectile-remove-known-project :which-key "delete project")
       "pf" '(helm-projectile-find-file :which-key "find file")
       "pp" '(helm-projectile-switch-project :which-key "switch project")
       "pt" '(neotree-toggle :which-key "Neotree")
