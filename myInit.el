@@ -1,4 +1,14 @@
+(setq gc-cons-threshold (* 800000 100))
+(setq-default fill-column 80)
 (column-number-mode 1)
+
+(use-package company
+  :ensure t
+  :config
+  (setq company-minimum-prefix-length 1)
+  (setq company-idle-delay 0)
+  (setq company-dabbrev-downcase 0)
+  (global-company-mode 1))
 
 (setq inhibit-startup-screen t)
 (use-package evil
@@ -47,16 +57,16 @@
   "Renames both current buffer and file it's visiting to NEW-NAME."
   (interactive "sNew name: ")
   (let ((name (buffer-name))
-        (filename (buffer-file-name)))
+	(filename (buffer-file-name)))
     (if (not filename)
-        (message "Buffer '%s' is not visiting a file!" name)
+	(message "Buffer '%s' is not visiting a file!" name)
       (if (get-buffer new-name)
-          (message "A buffer named '%s' already exists!" new-name)
-        (progn
-          (rename-file filename new-name 1)
-          (rename-buffer new-name)
-          (set-visited-file-name new-name)
-          (set-buffer-modified-p nil))))))
+	  (message "A buffer named '%s' already exists!" new-name)
+	(progn
+	  (rename-file filename new-name 1)
+	  (rename-buffer new-name)
+	  (set-visited-file-name new-name)
+	  (set-buffer-modified-p nil))))))
 (use-package general ; keybindings
   :ensure t
   :config
@@ -81,9 +91,9 @@
 
     ;; window
     "w" '(:which-key "window")
-    "wd" '(delete-window :which-key "delete window")
-    "wv" '(split-window-horizontally :which-key "vertical split")
-    "wV" '((lambda () (interactive) (split-window-horizontally) (other-window 1)) :which-key "vertical split and focus")
+    "wd" '((lambda () (interactive) (delete-window) (balance-windows)) :which-key "delete window")
+    "wv" '((lambda () (interactive) (split-window-horizontally) (balance-windows)) :which-key "vertical split")
+    "wV" '((lambda () (interactive) (split-window-horizontally) (other-window 1) (balance-windows)) :which-key "vertical split and focus")
     "1" '((lambda () (interactive) (winum-select-window-1)) :which-key "select first window")
     "2" '((lambda () (interactive) (winum-select-window-2)) :which-key "select second window")
     "3" '((lambda () (interactive) (winum-select-window-3)) :which-key "select third window")
@@ -102,7 +112,9 @@
     "pt" '(neotree-toggle :which-key "Neotree")
 
     ;; git
-    "g" '(magit-status :which-key "magit")
+    "g" '(:which-key "git")
+    "gm" '(magit-status :which-key "magit")
+    "gg" '(gist-list :which-key "gist")
 
     ;; help
     "h" '(:which-key "help")
@@ -123,7 +135,7 @@
 
     ;; shell
     "'" '((lambda () (interactive) (ansi-term "/usr/local/bin/zsh")) :which-key "shell")
-    ";" '(uncomment-region :which-key "uncomment")))
+    ";" '(comment-dwim :which-key "un/comment")))
 
 (use-package solarized-theme
   :ensure t
@@ -144,20 +156,6 @@
 ;; Set Super Key to Command
 (setq ns-command-modifier 'super)
 
-;; Project Organisation
-(use-package projectile
-  :ensure t
-  :config
-  (setq projectile-indexing-method 'alien) ; use external cmds find and git to index files
-  (define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
-  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
-  (projectile-mode +1))
-
-(use-package helm-projectile ; Open Projectile in Helm
-  :ensure t
-  :config
-  (setq projectile-completion-system 'helm)
-  (helm-projectile-on))
 
 (use-package shackle ; Helm window always bottom
   :ensure t
@@ -172,17 +170,27 @@
   :config
   (pdf-tools-install))
 
+;; Project Organisation
+(use-package projectile
+  :ensure t
+  :config
+  (setq projectile-indexing-method 'alien) ; use external cmds find and git to index files
+  (setq projectile-enable-caching t)
+  (define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
+  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+  (projectile-mode +1))
+
+(use-package helm-projectile ; Open Projectile in Helm
+  :ensure t
+  :config
+  (setq projectile-completion-system 'helm)
+  (helm-projectile-on))
+
 (use-package prettier-js ; indentation
   :ensure t
   :config
   (add-hook 'js2-mode-hook 'prettier-js-mode))
 
-(use-package company
-  :ensure t
-  :config
-  (setq company-minimum-prefix-length 1)
-  :hook
-  (after-init . global-company-mode))
 
 
 (defun setup-tide-mode ()
@@ -209,6 +217,7 @@
 
 (use-package json-mode
   :mode "\\.json\\'"
+  :init (setq json-reformat:indent-width: 2)
   :ensure t)
 
 (use-package tex
@@ -221,11 +230,80 @@
   (setq TeX-auto-save t)
   (setq TeX-PDF-mode t)
   (setq TeX-engine 'luatex)
+  (setq auto-fill-mode t)
   (auctex-latexmk-setup)
   (add-hook 'TeX-mode-hook 'flyspell-mode)
   :general(
-    :states '(normal)
+    :states '(normal visual insert emacs)
     :prefix ","
-    "b" '((lambda () (interactive) (TeX-command "LaTeX" 'TeX-master-file -1)) :which-key "build")))
+    "b" '((lambda () (interactive) (TeX-command "LaTeX" 'TeX-master-file -1)) :which-key "build")
+    "fr" '(LaTeX-fill-region :which-key "fill region") ;; C-c C-q C-r
+  ))
 
+(use-package magit :ensure t)
 (use-package gist :ensure t)
+(use-package markdown-mode
+  :ensure t
+  :mode (("README\\.md\\'" . gfm-mode)
+	 ("\\.md\\'" . markdown-mode)
+	 ("\\.markdown\\'" . markdown-mode))
+  :init (setq markdown-command "multimarkdown"))
+
+(use-package lsp-mode
+     :ensure t
+     :hook ((dart-mode . lsp) (python-mode . lsp) (c++-mode . lsp))
+     :commands lsp
+     :config
+     (setq lsp-prefer-flymake nil))
+   (use-package company-lsp 
+     :ensure t
+     :requires company
+     :commands company-lsp
+     :config
+     (setq company-transformers nil
+	   company-lsp-async t
+	   company-lsp-cache-candidates nil))
+(use-package helm-lsp :ensure t)
+(use-package lsp-ui 
+  :ensure t
+  :requires lsp-mode flycheck
+  :commands lsp-ui-mode
+  :config
+  (setq lsp-ui-doc-enable t
+    lsp-ui-doc-use-childframe t
+    lsp-ui-doc-position 'top
+    lsp-ui-doc-include-signature t
+    lsp-ui-sideline-enable nil
+    lsp-ui-flycheck-enable t
+    lsp-ui-flycheck-list-position 'right
+    lsp-ui-flycheck-live-reporting t
+    lsp-ui-peek-enable t
+    lsp-ui-peek-list-width 60
+    lsp-ui-peek-peek-height 25)
+  (add-hook 'lsp-mode-hook 'lsp-ui-mode))
+
+(use-package yasnippet :ensure t)
+(use-package dart-mode
+  :ensure t
+  :ensure-system-package (dart_language_server ."pub global active dart_language_server")
+  :custom
+  (dart-format-on-save t)
+  (dart-sdk-path "/Applications/flutter/bin/cache/dart-sdk/"))
+
+(use-package flutter
+  :ensure t
+  :after dart-mode
+  :bind (:map dart-mode-map
+	      ("C-M-x" . #'flutter-run-or-hot-reload))
+  :custom
+  (flutter-sdk-path "/Applications/flutter/"))
+
+;; Optional
+(use-package flutter-l10n-flycheck
+  :ensure t
+  :after flutter
+  :config
+  (flutter-l10n-flycheck-setup))
+
+(use-package cmake-mode :ensure t)
+(use-package platformio-mode :ensure t)

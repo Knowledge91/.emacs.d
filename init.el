@@ -13,6 +13,8 @@
   (package-install 'use-package)) ; and install the most recent version of use-package
 (require 'use-package)
 
+(use-package use-package-ensure-system-package :ensure t)
+
 (use-package org
   :ensure t
   :config
@@ -30,8 +32,7 @@
  ;; If there is more than one, they won't work right.
  '(evil-collection-setup-minibuffer t)
  '(package-selected-packages
-   (quote
-    (markdown-mode gist json-mode auctex-lua org-bullets typescript evil-collection neotree auctex-latexmk ranger evil-ranger zenburn-theme solarized-theme solarized-dark prettier-js prettier winum emacs-winum window-numbering evil-magit general which-key shackle helm-projectile exec-path-from-shell tide web-mode rjsx-mode use-package flycheck helm material-theme elpy evil-leader evil))))
+   '(cmake-mode ccls magit platformio-mode helm-lsp lsp-ui company-lsp yasnippet flutter-l10n-flycheck flutter dart-mode lsp-mode use-package-ensure-system-package markdown-mode gist json-mode auctex-lua org-bullets typescript evil-collection neotree auctex-latexmk ranger evil-ranger zenburn-theme solarized-theme solarized-dark prettier-js prettier winum emacs-winum window-numbering evil-magit general which-key shackle helm-projectile exec-path-from-shell tide web-mode rjsx-mode use-package flycheck helm material-theme elpy evil-leader evil)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
