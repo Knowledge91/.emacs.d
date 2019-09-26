@@ -129,6 +129,11 @@
     "e" '(:which-key "error")
     "el" '(flycheck-list-errors :which-key "list errors")
 
+    ;; yasnippet
+    "y" '(:which-key "yasnippet")
+    "yn" '(yas-new-snippet :which-key "new snippet")
+    "ye" '(yas-visit-snippet-file :which-key "edit snippet")
+
     ;; emacs
     "q" '(:which-key "emacs")
     "qe" '(eval-expression :which-key "eval")
@@ -254,7 +259,7 @@
 
 (use-package lsp-mode
      :ensure t
-     :hook ((dart-mode . lsp) (python-mode . lsp) (c++-mode . lsp))
+     :hook ((dart-mode . lsp) (python-mode . lsp) (c++-mode . lsp) (html-mode . lsp))
      :commands lsp
      :config
      (setq lsp-prefer-flymake nil))

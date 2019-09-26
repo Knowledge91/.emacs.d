@@ -314,7 +314,7 @@
 #+BEGIN_SRC emacs-lisp
      (use-package lsp-mode
        :ensure t
-       :hook ((dart-mode . lsp) (python-mode . lsp) (c++-mode . lsp))
+       :hook ((dart-mode . lsp) (python-mode . lsp) (c++-mode . lsp) (html-mode . lsp))
        :commands lsp
        :config
        (setq lsp-prefer-flymake nil))
@@ -384,6 +384,13 @@
 #+BEGIN_SRC emacs-lisp
   (use-package yasnippet
     :ensure t
+    :bind (:map yas-minor-mode-map
+		("<C-tab>" . 'yas-expand))
     :config
     (yas-global-mode 1))
+#+END_SRC
+* Web
+#+BEGIN_SRC emacs-lisp
+  (setq sgml-quick-keys 'close) ;; C-c / to close html tag
+  (setq css-indent-offset 2)
 #+END_SRC
