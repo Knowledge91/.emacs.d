@@ -107,6 +107,7 @@
 
     ;; project
     "p" '(:which-key "project")
+    "pd" '(projectile-remove-known-project :which-key "delete project")
     "pf" '(helm-projectile-find-file :which-key "find file")
     "pp" '(helm-projectile-switch-project :which-key "switch project")
     "pt" '(neotree-toggle :which-key "Neotree")
@@ -230,14 +231,16 @@
   (setq TeX-auto-save t)
   (setq TeX-PDF-mode t)
   (setq TeX-engine 'luatex)
-  (setq auto-fill-mode t)
   (auctex-latexmk-setup)
-  (add-hook 'TeX-mode-hook 'flyspell-mode)
+  (add-hook 'TeX-mode-hook #'flyspell-mode)
+  (add-hook 'TeX-mode-hook #'turn-on-auto-fill)
   :general(
-    :states '(normal visual insert emacs)
+    :states '(normal visual emacs)
     :prefix ","
     "b" '((lambda () (interactive) (TeX-command "LaTeX" 'TeX-master-file -1)) :which-key "build")
+    "fp" '(LaTeX-fill-paragraph :which-key "fill paragraph") ;; C-c C-q C-p
     "fr" '(LaTeX-fill-region :which-key "fill region") ;; C-c C-q C-r
+    "fs" '(LaTeX-fill-section :which-key "fill section") ;; C-C C-q C-s
   ))
 
 (use-package magit :ensure t)
@@ -282,7 +285,6 @@
     lsp-ui-peek-peek-height 25)
   (add-hook 'lsp-mode-hook 'lsp-ui-mode))
 
-(use-package yasnippet :ensure t)
 (use-package dart-mode
   :ensure t
   :ensure-system-package (dart_language_server ."pub global active dart_language_server")
@@ -307,3 +309,12 @@
 
 (use-package cmake-mode :ensure t)
 (use-package platformio-mode :ensure t)
+
+(when (executable-find "hunspell")
+  (setq-default ispell-program-name "hunspell")
+  (setq ispell-really-hunspell t))
+
+(use-package yasnippet
+  :ensure t
+  :config
+  (yas-global-mode 1))
