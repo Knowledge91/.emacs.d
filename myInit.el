@@ -1,3 +1,4 @@
+(toggle-frame-fullscreen)
 (setq gc-cons-threshold (* 800000 100))
 (setq-default fill-column 80)
 (column-number-mode 1)
@@ -111,6 +112,7 @@
     "pf" '(helm-projectile-find-file :which-key "find file")
     "pp" '(helm-projectile-switch-project :which-key "switch project")
     "pt" '(neotree-toggle :which-key "Neotree")
+    "pc" '(projectile-invalidate-cache :which-key "clear cache")
 
     ;; git
     "g" '(:which-key "git")
@@ -216,9 +218,10 @@
 (use-package tide
   :ensure t
   :mode ("\\.ts\\'" . 'typescript-mode)
+  :init
+  (electric-pair-mode)
   :config
   (add-hook 'before-save-hook #'tide-format-before-save)
-  (add-hook 'typescript-mode-hook #'setup-tide-mode #'electric-pair-mode)
   (setq tide-format-options '(:indentSize 2 :tabSize 2)))
 
 (use-package json-mode
@@ -259,7 +262,7 @@
 
 (use-package lsp-mode
      :ensure t
-     :hook ((dart-mode . lsp) (python-mode . lsp) (c++-mode . lsp) (html-mode . lsp))
+     :hook ((dart-mode . lsp) (python-mode . lsp) (c++-mode . lsp) (web-mode . lsp))
      :commands lsp
      :config
      (setq lsp-prefer-flymake nil))
@@ -321,5 +324,21 @@
 
 (use-package yasnippet
   :ensure t
+  :bind (:map yas-minor-mode-map
+	      ("<C-tab>" . 'yas-expand))
   :config
   (yas-global-mode 1))
+
+(use-package web-mode
+  :mode "\\.html\\'"
+  :ensure t
+  :config
+  (setq web-mode-enable-auto-pairing t)
+  (setq web-mode-markup-indent-offset 2))
+;; (setq sgml-quick-keys 'close) ;; C-c / to close html tag
+(setq css-indent-offset 2)
+
+(general-def org-mode-map
+  :states 'normal
+  :keymaps 'org-mode-map
+  ", i" 'org-insert-todo-heading)
