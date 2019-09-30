@@ -2,6 +2,7 @@
 (setq gc-cons-threshold (* 800000 100))
 (setq-default fill-column 80)
 (column-number-mode 1)
+(setq package-check-signature nil)
 
 (use-package company
   :ensure t
@@ -317,6 +318,11 @@
 
 (use-package cmake-mode :ensure t)
 (use-package platformio-mode :ensure t)
+(use-package clang-format
+  :ensure t
+  :config
+  (add-hook 'c++-mode-hook
+	    (lambda () (add-hook 'before-save-hook #'clang-format-buffer nil 'local))))
 
 (when (executable-find "hunspell")
   (setq-default ispell-program-name "hunspell")
@@ -340,5 +346,7 @@
 
 (general-def org-mode-map
   :states 'normal
+  :prefix ","
   :keymaps 'org-mode-map
-  ", i" 'org-insert-todo-heading)
+  "h" 'org-insert-heading-respect-content
+  "i" 'org-insert-todo-heading)

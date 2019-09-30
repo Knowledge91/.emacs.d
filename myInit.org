@@ -6,6 +6,7 @@
   (setq gc-cons-threshold (* 800000 100))
   (setq-default fill-column 80)
   (column-number-mode 1)
+  (setq package-check-signature nil)
 #+END_SRC
 * Company
 #+BEGIN_SRC emacs-lisp
@@ -375,8 +376,13 @@
 #+END_SRC
 * C++
 #+BEGIN_SRC emacs-lisp
-  (use-package cmake-mode :ensure t)
-  (use-package platformio-mode :ensure t)
+    (use-package cmake-mode :ensure t)
+    (use-package platformio-mode :ensure t)
+    (use-package clang-format
+      :ensure t
+      :config
+      (add-hook 'c++-mode-hook
+		(lambda () (add-hook 'before-save-hook #'clang-format-buffer nil 'local))))
 #+END_SRC
 * Spellcheck
 #+BEGIN_SRC emacs-lisp
