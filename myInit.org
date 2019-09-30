@@ -125,7 +125,9 @@
       "pf" '(helm-projectile-find-file :which-key "find file")
       "pp" '(helm-projectile-switch-project :which-key "switch project")
       "pt" '(neotree-toggle :which-key "Neotree")
-      "pc" '(projectile-invalidate-cache :which-key "clear cache")
+      "pi" '(projectile-invalidate-cache :which-key "clear cache")
+      "pc" '(projectile-compile-project :which-key "compile")
+      "pr" '(projectile-run-project :which-key "run")
 
       ;; git
       "g" '(:which-key "git")
