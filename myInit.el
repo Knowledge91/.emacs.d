@@ -86,6 +86,7 @@
 
     ;; files
     "f" '(:which-key "files")
+    "fc" '(copy-file :which-key "copy")
     "ff" '(helm-find-files :which-key "find files")
     "fs" '(save-buffer :which-key "save file")
     "fd" '(delete-if-file :which-key "delete file")
@@ -113,7 +114,9 @@
     "pf" '(helm-projectile-find-file :which-key "find file")
     "pp" '(helm-projectile-switch-project :which-key "switch project")
     "pt" '(neotree-toggle :which-key "Neotree")
-    "pc" '(projectile-invalidate-cache :which-key "clear cache")
+    "pi" '(projectile-invalidate-cache :which-key "clear cache")
+    "pc" '(projectile-compile-project :which-key "compile")
+    "pr" '(projectile-run-project :which-key "run")
 
     ;; git
     "g" '(:which-key "git")
@@ -245,6 +248,7 @@
   (add-hook 'TeX-mode-hook #'turn-on-auto-fill)
   :general(
     :states '(normal visual emacs)
+    :keymap 'LaTeX-mode-map
     :prefix ","
     "b" '((lambda () (interactive) (TeX-command "LaTeX" 'TeX-master-file -1)) :which-key "build")
     "fp" '(LaTeX-fill-paragraph :which-key "fill paragraph") ;; C-c C-q C-p
@@ -266,7 +270,8 @@
      :hook ((dart-mode . lsp) (python-mode . lsp) (c++-mode . lsp) (web-mode . lsp))
      :commands lsp
      :config
-     (setq lsp-prefer-flymake nil))
+     ;(setq lsp-prefer-flymake nil)
+     )
    (use-package company-lsp 
      :ensure t
      :requires company
@@ -276,23 +281,23 @@
 	   company-lsp-async t
 	   company-lsp-cache-candidates nil))
 (use-package helm-lsp :ensure t)
-(use-package lsp-ui 
-  :ensure t
-  :requires lsp-mode flycheck
-  :commands lsp-ui-mode
-  :config
-  (setq lsp-ui-doc-enable t
-    lsp-ui-doc-use-childframe t
-    lsp-ui-doc-position 'top
-    lsp-ui-doc-include-signature t
-    lsp-ui-sideline-enable nil
-    lsp-ui-flycheck-enable t
-    lsp-ui-flycheck-list-position 'right
-    lsp-ui-flycheck-live-reporting t
-    lsp-ui-peek-enable t
-    lsp-ui-peek-list-width 60
-    lsp-ui-peek-peek-height 25)
-  (add-hook 'lsp-mode-hook 'lsp-ui-mode))
+;; (use-package lsp-ui 
+;;   :ensure t
+;;   :requires lsp-mode flycheck
+;;   :commands lsp-ui-mode
+;;   :config
+;;   (setq lsp-ui-doc-enable t
+;;     lsp-ui-doc-use-childframe t
+;;     lsp-ui-doc-position 'top
+;;     lsp-ui-doc-include-signature t
+;;     lsp-ui-sideline-enable nil
+;;     lsp-ui-flycheck-enable t
+;;     lsp-ui-flycheck-list-position 'right
+;;     lsp-ui-flycheck-live-reporting t
+;;     lsp-ui-peek-enable t
+;;     lsp-ui-peek-list-width 60
+;;     lsp-ui-peek-peek-height 25)
+  ;; (add-hook 'lsp-mode-hook 'lsp-ui-mode)) ;
 
 (use-package dart-mode
   :ensure t
