@@ -389,6 +389,10 @@
       :config
       (add-hook 'c++-mode-hook
 		(lambda () (add-hook 'before-save-hook #'clang-format-buffer nil 'local))))
+  (general-def c++-mode-map
+    :states 'normal
+    :prefix ","
+    "c" '(ff-find-other-file :which-key "goto source/header"))
 #+END_SRC
 * Spellcheck
 #+BEGIN_SRC emacs-lisp
