@@ -110,13 +110,14 @@
 
     ;; project
     "p" '(:which-key "project")
+    "pc" '(projectile-compile-project :which-key "compile")
     "pd" '(projectile-remove-known-project :which-key "delete project")
     "pf" '(helm-projectile-find-file :which-key "find file")
-    "pp" '(helm-projectile-switch-project :which-key "switch project")
-    "pt" '(neotree-toggle :which-key "Neotree")
     "pi" '(projectile-invalidate-cache :which-key "clear cache")
-    "pc" '(projectile-compile-project :which-key "compile")
+    "pn" '(neotree-toggle :which-key "Neotree")
+    "pp" '(helm-projectile-switch-project :which-key "switch project")
     "pr" '(projectile-run-project :which-key "run")
+    "pt" '(projectile-test-project :which-key "test")
 
     ;; git
     "g" '(:which-key "git")
@@ -203,30 +204,28 @@
   :config
   (add-hook 'js2-mode-hook 'prettier-js-mode))
 
-
-
-(defun setup-tide-mode ()
-  (interactive)
-  (tide-setup)
-  (flycheck-mode +1)
-  (setq flycheck-check-syntax-automatically '(save mode-enabled))
-  (eldoc-mode +1)
-  (tide-hl-identifier-mode +1)
-  (company-mode +1))
+;; (defun setup-tide-mode ()
+;;   (interactive)
+;;   (tide-setup)
+;;   (flycheck-mode +1)
+;;   (setq flycheck-check-syntax-automatically '(save mode-enabled))
+;;   (eldoc-mode +1)
+;;   (tide-hl-identifier-mode +1)
+;;   (company-mode +1))
 
 (use-package typescript-mode
   :ensure t
   :init
   (setq typescript-indent-level 2))
 
-(use-package tide
-  :ensure t
-  :mode ("\\.ts\\'" . 'typescript-mode)
-  :init
-  (electric-pair-mode)
-  :config
-  (add-hook 'before-save-hook #'tide-format-before-save)
-  (setq tide-format-options '(:indentSize 2 :tabSize 2)))
+;; (use-package tide
+;;   :ensure t
+;;   :mode ("\\.ts\\'" . 'typescript-mode)
+;;   :init
+;;   (electric-pair-mode)
+;;   :config
+;;   (add-hook 'before-save-hook #'tide-format-before-save)
+;;   (setq tide-format-options '(:indentSize 2 :tabSize 2)))
 
 (use-package json-mode
   :mode "\\.json\\'"
@@ -236,14 +235,14 @@
 (use-package tex
   :mode "//.tex//'"
   :ensure auctex
-  :ensure auctex-latexmk
+  :ensure auctex-latexmk		;
   :config
   (setq TeX-auto-save t)
   (setq TeX-parse-self t)
   (setq TeX-auto-save t)
   (setq TeX-PDF-mode t)
-  (setq TeX-engine 'luatex)
   (auctex-latexmk-setup)
+  (setq TeX-engine 'luatex)
   (add-hook 'TeX-mode-hook #'flyspell-mode)
   (add-hook 'TeX-mode-hook #'turn-on-auto-fill)
   :general(
@@ -267,11 +266,10 @@
 
 (use-package lsp-mode
      :ensure t
-     :hook ((dart-mode . lsp) (python-mode . lsp) (c++-mode . lsp) (web-mode . lsp))
+     :hook ((dart-mode . lsp) (python-mode . lsp) (c++-mode . lsp) (web-mode . lsp) (typescript-mode . lsp))
      :commands lsp
      :config
-     ;(setq lsp-prefer-flymake nil)
-     )
+     (setq lsp-prefer-flymake nil))
    (use-package company-lsp 
      :ensure t
      :requires company
@@ -281,23 +279,23 @@
 	   company-lsp-async t
 	   company-lsp-cache-candidates nil))
 (use-package helm-lsp :ensure t)
-;; (use-package lsp-ui 
-;;   :ensure t
-;;   :requires lsp-mode flycheck
-;;   :commands lsp-ui-mode
-;;   :config
-;;   (setq lsp-ui-doc-enable t
-;;     lsp-ui-doc-use-childframe t
-;;     lsp-ui-doc-position 'top
-;;     lsp-ui-doc-include-signature t
-;;     lsp-ui-sideline-enable nil
-;;     lsp-ui-flycheck-enable t
-;;     lsp-ui-flycheck-list-position 'right
-;;     lsp-ui-flycheck-live-reporting t
-;;     lsp-ui-peek-enable t
-;;     lsp-ui-peek-list-width 60
-;;     lsp-ui-peek-peek-height 25)
-  ;; (add-hook 'lsp-mode-hook 'lsp-ui-mode)) ;
+(use-package lsp-ui 
+  :ensure t
+  :requires lsp-mode flycheck
+  :commands lsp-ui-mode
+  :config
+  (setq lsp-ui-flycheck-enable t
+    lsp-ui-flycheck-list-position 'right
+    lsp-ui-flycheck-live-reporting t)
+   ;; lsp-ui-doc-enable t
+   ;;  lsp-ui-doc-use-childframe t
+   ;;  lsp-ui-doc-position 'top
+   ;;  lsp-ui-doc-include-signature t
+   ;;  lsp-ui-sideline-enable nil
+    ;; lsp-ui-peek-enable t
+    ;; lsp-ui-peek-list-width 60
+    ;; lsp-ui-peek-peek-height 25)
+  (add-hook 'lsp-mode-hook 'lsp-ui-mode))
 
 (use-package dart-mode
   :ensure t
@@ -322,12 +320,16 @@
   (flutter-l10n-flycheck-setup))
 
 (use-package cmake-mode :ensure t)
-(use-package platformio-mode :ensure t)
-(use-package clang-format
-  :ensure t
-  :config
-  (add-hook 'c++-mode-hook
-	    (lambda () (add-hook 'before-save-hook #'clang-format-buffer nil 'local))))
+  (use-package platformio-mode :ensure t)
+  (use-package clang-format
+    :ensure t
+    :config
+    (add-hook 'c++-mode-hook
+	      (lambda () (add-hook 'before-save-hook #'clang-format-buffer nil 'local))))
+(general-def c++-mode-map
+  :states 'normal
+  :prefix ","
+  "c" '(ff-find-other-file :which-key "goto source/header"))
 
 (when (executable-find "hunspell")
   (setq-default ispell-program-name "hunspell")
@@ -355,3 +357,7 @@
   :keymaps 'org-mode-map
   "h" 'org-insert-heading-respect-content
   "i" 'org-insert-todo-heading)
+
+(use-package ein
+  :ensure t
+  :commands (ein:notebooklist-open))

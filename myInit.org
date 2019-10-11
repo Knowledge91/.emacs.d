@@ -147,6 +147,9 @@
       ;; error
       "e" '(:which-key "error")
       "el" '(flycheck-list-errors :which-key "list errors")
+      "en" '(ein:notebooklist-open :which-key "open notebooklist")
+      "es" '(ein:jupyter-server-start :which-key "start jupyter server")
+      "eq" '(ein:jupyter-server-stop :which-key "stop jupyter server")
 
       ;; yasnippet
       "y" '(:which-key "yasnippet")
@@ -222,30 +225,28 @@
     :config
     (add-hook 'js2-mode-hook 'prettier-js-mode))
 
-
-
-  (defun setup-tide-mode ()
-    (interactive)
-    (tide-setup)
-    (flycheck-mode +1)
-    (setq flycheck-check-syntax-automatically '(save mode-enabled))
-    (eldoc-mode +1)
-    (tide-hl-identifier-mode +1)
-    (company-mode +1))
+  ;; (defun setup-tide-mode ()
+  ;;   (interactive)
+  ;;   (tide-setup)
+  ;;   (flycheck-mode +1)
+  ;;   (setq flycheck-check-syntax-automatically '(save mode-enabled))
+  ;;   (eldoc-mode +1)
+  ;;   (tide-hl-identifier-mode +1)
+  ;;   (company-mode +1))
 
   (use-package typescript-mode
     :ensure t
     :init
     (setq typescript-indent-level 2))
 
-  (use-package tide
-    :ensure t
-    :mode ("\\.ts\\'" . 'typescript-mode)
-    :init
-    (electric-pair-mode)
-    :config
-    (add-hook 'before-save-hook #'tide-format-before-save)
-    (setq tide-format-options '(:indentSize 2 :tabSize 2)))
+  ;; (use-package tide
+  ;;   :ensure t
+  ;;   :mode ("\\.ts\\'" . 'typescript-mode)
+  ;;   :init
+  ;;   (electric-pair-mode)
+  ;;   :config
+  ;;   (add-hook 'before-save-hook #'tide-format-before-save)
+  ;;   (setq tide-format-options '(:indentSize 2 :tabSize 2)))
 
 #+END_SRC
 
@@ -288,14 +289,14 @@
   (use-package tex
     :mode "//.tex//'"
     :ensure auctex
-    :ensure auctex-latexmk
+    :ensure auctex-latexmk		;
     :config
     (setq TeX-auto-save t)
     (setq TeX-parse-self t)
     (setq TeX-auto-save t)
     (setq TeX-PDF-mode t)
-    (setq TeX-engine 'luatex)
     (auctex-latexmk-setup)
+    (setq TeX-engine 'luatex)
     (add-hook 'TeX-mode-hook #'flyspell-mode)
     (add-hook 'TeX-mode-hook #'turn-on-auto-fill)
     :general(
@@ -324,11 +325,10 @@
 #+BEGIN_SRC emacs-lisp
      (use-package lsp-mode
        :ensure t
-       :hook ((dart-mode . lsp) (python-mode . lsp) (c++-mode . lsp) (web-mode . lsp))
+       :hook ((dart-mode . lsp) (python-mode . lsp) (c++-mode . lsp) (web-mode . lsp) (typescript-mode . lsp))
        :commands lsp
        :config
-       ;(setq lsp-prefer-flymake nil)
-       )
+       (setq lsp-prefer-flymake nil))
      (use-package company-lsp 
        :ensure t
        :requires company
@@ -338,23 +338,23 @@
 	     company-lsp-async t
 	     company-lsp-cache-candidates nil))
   (use-package helm-lsp :ensure t)
-  ;; (use-package lsp-ui 
-  ;;   :ensure t
-  ;;   :requires lsp-mode flycheck
-  ;;   :commands lsp-ui-mode
-  ;;   :config
-  ;;   (setq lsp-ui-doc-enable t
-  ;;     lsp-ui-doc-use-childframe t
-  ;;     lsp-ui-doc-position 'top
-  ;;     lsp-ui-doc-include-signature t
-  ;;     lsp-ui-sideline-enable nil
-  ;;     lsp-ui-flycheck-enable t
-  ;;     lsp-ui-flycheck-list-position 'right
-  ;;     lsp-ui-flycheck-live-reporting t
-  ;;     lsp-ui-peek-enable t
-  ;;     lsp-ui-peek-list-width 60
-  ;;     lsp-ui-peek-peek-height 25)
-    ;; (add-hook 'lsp-mode-hook 'lsp-ui-mode)) ;
+  (use-package lsp-ui 
+    :ensure t
+    :requires lsp-mode flycheck
+    :commands lsp-ui-mode
+    :config
+    (setq lsp-ui-flycheck-enable t
+      lsp-ui-flycheck-list-position 'right
+      lsp-ui-flycheck-live-reporting t)
+     ;; lsp-ui-doc-enable t
+     ;;  lsp-ui-doc-use-childframe t
+     ;;  lsp-ui-doc-position 'top
+     ;;  lsp-ui-doc-include-signature t
+     ;;  lsp-ui-sideline-enable nil
+      ;; lsp-ui-peek-enable t
+      ;; lsp-ui-peek-list-width 60
+      ;; lsp-ui-peek-peek-height 25)
+    (add-hook 'lsp-mode-hook 'lsp-ui-mode))
 #+END_SRC
 * Flutter
 #+BEGIN_SRC emacs-lisp
@@ -428,4 +428,10 @@
     :keymaps 'org-mode-map
     "h" 'org-insert-heading-respect-content
     "i" 'org-insert-todo-heading)
+#+END_SRC
+* Python
+#+BEGIN_SRC emacs-lisp
+  (use-package ein
+    :ensure t
+    :commands (ein:notebooklist-open))
 #+END_SRC
