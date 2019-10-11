@@ -144,12 +144,15 @@
       "hm" '(describe-mode :which-key "describe mode")
       "hk" '(describe-key :which-key "describe key")
 
+      ;; jupyter
+      "j" '(:which-key "jupyter")
+      "jl" '(ein:notebooklist-open :which-key "open notebooklist")
+      "js" '(ein:jupyter-server-start :which-key "start jupyter server")
+      "jq" '(ein:jupyter-server-stop :which-key "stop jupyter server")
+
       ;; error
       "e" '(:which-key "error")
       "el" '(flycheck-list-errors :which-key "list errors")
-      "en" '(ein:notebooklist-open :which-key "open notebooklist")
-      "es" '(ein:jupyter-server-start :which-key "start jupyter server")
-      "eq" '(ein:jupyter-server-stop :which-key "stop jupyter server")
 
       ;; yasnippet
       "y" '(:which-key "yasnippet")
