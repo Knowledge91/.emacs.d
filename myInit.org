@@ -2,7 +2,7 @@
 
 * General
 #+BEGIN_SRC emacs-lisp
-  (toggle-frame-fullscreen)
+  ;; (toggle-frame-fullscreen)
   (setq gc-cons-threshold (* 800000 100))
   (setq-default fill-column 80)
   (column-number-mode 1)
@@ -96,6 +96,12 @@
       "ad" '(deer :which-key "deer")
       "ar" '(ranger :which-key "ranger")
 
+      ;; debug
+      "d" '(:wich-key "debug")
+      "dd" '(dap-debug :which-key "start")
+      "dj" '(dap-next :which-key "next")
+      "db" '(dap-breakpoint-toggle :which-key "breakpoint")
+
       ;; files
       "f" '(:which-key "files")
       "fc" '(copy-file :which-key "copy")
@@ -143,6 +149,10 @@
       "hv" '(describe-variable :which-key "describe variable")
       "hm" '(describe-mode :which-key "describe mode")
       "hk" '(describe-key :which-key "describe key")
+
+      ;; insert
+      "i" '(:which-key "insert")
+      "ic" '(insert-char :wich-key "character")
 
       ;; jupyter
       "j" '(:which-key "jupyter")
@@ -306,7 +316,7 @@
       :states '(normal visual emacs)
       :keymap 'LaTeX-mode-map
       :prefix ","
-      "b" '((lambda () (interactive) (TeX-command "LaTeX" 'TeX-master-file -1)) :which-key "build")
+      "b" '((lambda () (interactive) (TeX-command "LatexMk" 'TeX-master-file -1)) :which-key "build")
       "fp" '(LaTeX-fill-paragraph :which-key "fill paragraph") ;; C-c C-q C-p
       "fr" '(LaTeX-fill-region :which-key "fill region") ;; C-c C-q C-r
       "fs" '(LaTeX-fill-section :which-key "fill section") ;; C-C C-q C-s
@@ -328,7 +338,7 @@
 #+BEGIN_SRC emacs-lisp
      (use-package lsp-mode
        :ensure t
-       :hook ((dart-mode . lsp) (python-mode . lsp) (c++-mode . lsp) (web-mode . lsp) (typescript-mode . lsp))
+       :hook ((dart-mode . lsp) (python-mode . lsp) (c++-mode . lsp) (web-mode . lsp) (typescript-mode . lsp) (css-mode . lsp) (TeX-mode . lsp))
        :commands lsp
        :config
        (setq lsp-prefer-flymake nil))
@@ -358,6 +368,42 @@
       ;; lsp-ui-peek-list-width 60
       ;; lsp-ui-peek-peek-height 25)
     (add-hook 'lsp-mode-hook 'lsp-ui-mode))
+  (use-package dap-mode
+    :ensure t
+    :config
+    (dap-mode 1)
+    (dap-ui-mode 1)
+    (require 'dap-python)
+
+
+    (defun my/window-visible (b-name)
+      "Return whether B-NAME is visible."
+      (-> (-compose 'buffer-name 'window-buffer)
+	  (-map (window-list))
+	  (-contains? b-name)))
+  
+    (defun my/show-debug-windows (session)
+      "Show debug windows."
+      (let ((lsp--cur-workspace (dap--debug-session-workspace session)))
+	(save-excursion
+	  ;; display locals
+	  (unless (my/window-visible dap-ui--locals-buffer)
+	  (dap-ui-locals))
+	  ;; display sessions
+	  (unless (my/window-visible dap-ui--sessions-buffer)
+	  (dap-ui-sessions)))))
+  
+    (add-hook 'dap-stopped-hook 'my/show-debug-windows)
+  
+    (defun my/hide-debug-windows (session)
+      "Hide debug windows when all debug sessions are dead."
+      (unless (-filter 'dap--session-running (dap--get-sessions))
+	(and (get-buffer dap-ui--sessions-buffer)
+	   (kill-buffer dap-ui--sessions-buffer))
+	(and (get-buffer dap-ui--locals-buffer)
+	   (kill-buffer dap-ui--locals-buffer))))
+  
+    (add-hook 'dap-terminated-hook 'my/hide-debug-windows))
 #+END_SRC
 * Flutter
 #+BEGIN_SRC emacs-lisp
@@ -434,7 +480,19 @@
 #+END_SRC
 * Python
 #+BEGIN_SRC emacs-lisp
+  (use-package pyvenv :ensure t)
   (use-package ein
     :ensure t
-    :commands (ein:notebooklist-open))
+    :commands (ein:notebooklist-open)
+    :general(
+	     :states '(normal)
+	     :keymap 'ein:notebook-mode-map
+	     :prefix ","
+	     "d" '(ein:worksheet-kill-cell :wich-key "kill cell")
+	     "j" '(ein:worksheet-goto-next-input :whick-key "goto next input")
+	     "k" '(ein:worksheet-goto-prev-input :whick-key "goto prev input")
+	     "t" '(ein:worksheet-change-cell-type :which-key "change cell type")
+	     "J" '(ein:worksheet-insert-cell-below :which-key "insert cell below")
+	     "K" '(ein:worksheet-insert-cell-below :which-key "insert cell above"))
+    :config (setq ein:polymode t))
 #+END_SRC

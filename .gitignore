@@ -7,3 +7,7 @@ projectile-bookmarks.eld
 *~
 eshell
 var/
+.extension
+.lsp-session-v1
+projectile.cache
+request
