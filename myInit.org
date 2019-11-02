@@ -2,11 +2,15 @@
 
 * General
 #+BEGIN_SRC emacs-lisp
-  ;; (toggle-frame-fullscreen)
-  (setq gc-cons-threshold (* 800000 100))
-  (setq-default fill-column 80)
-  (column-number-mode 1)
-  (setq package-check-signature nil)
+    ;; (toggle-frame-fullscreen)
+    (setq gc-cons-threshold (* 800000 100))
+    (setq-default fill-column 80)
+    (column-number-mode 1)
+    (setq package-check-signature nil)
+    (use-package format-all 
+      :ensure t
+      :hook (web-mode . format-all-mode))
+
 #+END_SRC
 * Company
 #+BEGIN_SRC emacs-lisp
@@ -235,8 +239,7 @@
 #+BEGIN_SRC emacs-lisp
   (use-package prettier-js ; indentation
     :ensure t
-    :config
-    (add-hook 'js2-mode-hook 'prettier-js-mode))
+    :hook (js2-mode prettier-js-mode))
 
   ;; (defun setup-tide-mode ()
   ;;   (interactive)
@@ -374,6 +377,7 @@
     (dap-mode 1)
     (dap-ui-mode 1)
     (require 'dap-python)
+    (require 'dap-lldb)
 
 
     (defun my/window-visible (b-name)
@@ -381,7 +385,7 @@
       (-> (-compose 'buffer-name 'window-buffer)
 	  (-map (window-list))
 	  (-contains? b-name)))
-  
+
     (defun my/show-debug-windows (session)
       "Show debug windows."
       (let ((lsp--cur-workspace (dap--debug-session-workspace session)))
@@ -392,9 +396,9 @@
 	  ;; display sessions
 	  (unless (my/window-visible dap-ui--sessions-buffer)
 	  (dap-ui-sessions)))))
-  
+
     (add-hook 'dap-stopped-hook 'my/show-debug-windows)
-  
+
     (defun my/hide-debug-windows (session)
       "Hide debug windows when all debug sessions are dead."
       (unless (-filter 'dap--session-running (dap--get-sessions))
@@ -402,7 +406,7 @@
 	   (kill-buffer dap-ui--sessions-buffer))
 	(and (get-buffer dap-ui--locals-buffer)
 	   (kill-buffer dap-ui--locals-buffer))))
-  
+
     (add-hook 'dap-terminated-hook 'my/hide-debug-windows))
 #+END_SRC
 * Flutter

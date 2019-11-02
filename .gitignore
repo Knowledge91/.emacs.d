@@ -11,3 +11,7 @@ var/
 .lsp-session-v1
 projectile.cache
 request
+.dap-breakpoints
+bookmarks
+network-security.data
+myInit.el
