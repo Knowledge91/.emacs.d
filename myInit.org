@@ -2,14 +2,15 @@
 
 * General
 #+BEGIN_SRC emacs-lisp
-    ;; (toggle-frame-fullscreen)
-    (setq gc-cons-threshold (* 800000 100))
-    (setq-default fill-column 80)
-    (column-number-mode 1)
-    (setq package-check-signature nil)
-    (use-package format-all 
-      :ensure t
-      :hook (web-mode . format-all-mode))
+  ;; (toggle-frame-fullscreen)
+  (setq gc-cons-threshold (* 800000 100))
+  (setq-default fill-column 80)
+  (column-number-mode 1)
+  (setq package-check-signature nil)
+  (use-package format-all 
+    :ensure t
+    :hook ((web-mode typescript-mode) . format-all-mode))
+
 
 #+END_SRC
 * Company
@@ -144,7 +145,10 @@
       ;; git
       "g" '(:which-key "git")
       "gm" '(magit-status :which-key "magit")
-      "gg" '(gist-list :which-key "gist")
+      "gg" '(gist-list :which-key "list gists")
+      "gc" '(gist-region-or-buffer :which-key "create gist")
+      "gc" '(gist-region-or-buffer-private :which-key "create private gist")
+      "gR" '(write-file :which-key "rename gist")
 
       ;; help
       "h" '(:which-key "help")
@@ -469,7 +473,8 @@
     :ensure t
     :config
     (setq web-mode-enable-auto-pairing t)
-    (setq web-mode-markup-indent-offset 2))
+    (setq web-mode-markup-indent-offset 2)
+    (add-hook 'web-mode-hook #'auto-fill-mode))
   ;; (setq sgml-quick-keys 'close) ;; C-c / to close html tag
   (setq css-indent-offset 2)
 #+END_SRC
