@@ -284,7 +284,6 @@
 
 
 (load (expand-file-name "./git/init.el" user-emacs-directory))
-(load (expand-file-name "./python/init.el" user-emacs-directory))
 (load (expand-file-name "./lisp/init.el" user-emacs-directory))
 ;; (load (expand-file-name "./eshell.el" user-emacs-directory))
 
@@ -487,7 +486,7 @@
     "h" 'org-insert-heading-respect-content
     "i" 'org-insert-todo-heading)
 #+END_SRC
-* COMMENT Python
+* Python
 #+BEGIN_SRC emacs-lisp
   (use-package pyvenv :ensure t)
   (use-package ein
@@ -497,18 +496,20 @@
 	     :states '(normal)
 	     :keymap 'ein:notebook-mode-map
 	     :prefix ","
+	     "c" '(ein:worksheet-copy-cell :which-key "copy cell")
 	     "d" '(ein:worksheet-kill-cell :wich-key "kill cell")
-	     "e" '(ein:worksheet-execute-cell :which-key "execute cell")
+	     "e" '(ein:worksheet-execute-cell-and-goto-next :which-key "execute cell")
 	     "E" '(ein:worksheet-execute-all-cell :which-key "execute all cells")
 	     "j" '(ein:worksheet-goto-next-input :whick-key "goto next input")
 	     "J" '(ein:worksheet-insert-cell-below :which-key "insert cell below")
 	     "k" '(ein:worksheet-goto-prev-input :whick-key "goto prev input")
-	     "K" '(ein:worksheet-insert-cell-below :which-key "insert cell above")
+	     "K" '(ein:worksheet-insert-cell-above :which-key "insert cell above")
 	     "m" '(ein:worksheet-merge-cell :which-key "merge cell")
 	     "M" '(ein:worksheet-split-cell-at-point :which-key "split cell")
 	     "q" '(ein:notebook-kernel-interrupt-command :which-key "stop")
 	     "Q" '(ein:notebook-kill-kernel-then-close-command :which-key "close")
 	     "R" '(ein:notebook-rename-command :which-key "rename notebook")
-	     "t" '(ein:worksheet-change-cell-type :which-key "change cell type"))
-    :config (setq ein:polymode t))
+	     "t" '(ein:worksheet-change-cell-type :which-key "change cell type")
+	     "y" '(ein:worksheet-yank-cell :which-key "yank cell")
+	     ))
 #+END_SRC
