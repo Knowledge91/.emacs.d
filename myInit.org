@@ -509,6 +509,7 @@
 	     "q" '(ein:notebook-kernel-interrupt-command :which-key "stop")
 	     "Q" '(ein:notebook-kill-kernel-then-close-command :which-key "close")
 	     "R" '(ein:notebook-rename-command :which-key "rename notebook")
+	     "s" '(ein:notebook-save-notebook :which-key "save notebook")
 	     "t" '(ein:worksheet-change-cell-type :which-key "change cell type")
 	     "y" '(ein:worksheet-yank-cell :which-key "yank cell")
 	     ))
