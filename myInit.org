@@ -487,7 +487,7 @@
     "h" 'org-insert-heading-respect-content
     "i" 'org-insert-todo-heading)
 #+END_SRC
-* Python
+* COMMENT Python
 #+BEGIN_SRC emacs-lisp
   (use-package pyvenv :ensure t)
   (use-package ein
@@ -499,9 +499,13 @@
 	     :prefix ","
 	     "d" '(ein:worksheet-kill-cell :wich-key "kill cell")
 	     "j" '(ein:worksheet-goto-next-input :whick-key "goto next input")
-	     "k" '(ein:worksheet-goto-prev-input :whick-key "goto prev input")
-	     "t" '(ein:worksheet-change-cell-type :which-key "change cell type")
 	     "J" '(ein:worksheet-insert-cell-below :which-key "insert cell below")
-	     "K" '(ein:worksheet-insert-cell-below :which-key "insert cell above"))
+	     "k" '(ein:worksheet-goto-prev-input :whick-key "goto prev input")
+	     "K" '(ein:worksheet-insert-cell-below :which-key "insert cell above")
+	     "m" '(ein:worksheet-merge-cell :which-key "merge cell")
+	     "M" '(ein:worksheet-split-cell-at-point :which-key "split cell")
+	     "q" '(ein:notebook-kill-kernel-then-close-command :which-key "close")
+	     "R" '(ein:notebook-rename-command :which-key "rename notebook")
+	     "t" '(ein:worksheet-change-cell-type :which-key "change cell type"))
     :config (setq ein:polymode t))
 #+END_SRC
