@@ -9,7 +9,7 @@
   (setq package-check-signature nil)
   (use-package format-all 
     :ensure t
-    :hook ((web-mode typescript-mode) . format-all-mode))
+    :hook ((web-mode typescript-mode json-mode) . format-all-mode))
 
 
 #+END_SRC
@@ -181,6 +181,7 @@
       "q" '(:which-key "emacs")
       "qe" '(eval-expression :which-key "eval")
       "qq" '(save-buffers-kill-terminal :which-key "close")
+      "ql" '(command-log-mode :which-key "log commands")
 
       ;; shell
       "'" '((lambda () (interactive) (ansi-term "/usr/local/bin/zsh")) :which-key "shell")
@@ -300,7 +301,6 @@
 #+BEGIN_SRC emacs-lisp
   (use-package json-mode
     :mode "\\.json\\'"
-    :init (setq json-reformat:indent-width: 2)
     :ensure t)
 #+END_SRC
 * Latex
@@ -515,4 +515,10 @@
 	     "v" '(ein:worksheet-toggle-output :which-key "toggle output")
 	     "y" '(ein:worksheet-yank-cell :which-key "yank cell")
 	     ))
+#+END_SRC
+* Debug
+#+BEGIN_SRC emacs-lisp
+  (use-package command-log-mode
+    :ensure t
+    :init (setq command-log-mode-auto-show t))
 #+END_SRC
