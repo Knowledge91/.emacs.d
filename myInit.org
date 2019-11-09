@@ -9,7 +9,7 @@
   (setq package-check-signature nil)
   (use-package format-all 
     :ensure t
-    :hook ((web-mode typescript-mode json-mode) . format-all-mode))
+    :hook ((web-mode typescript-mode json-mode python-mode) . format-all-mode))
 
 
 #+END_SRC
@@ -297,10 +297,13 @@
 
 #+END_SRC
 
-* JSON
+* JSON / YAML
 #+BEGIN_SRC emacs-lisp
   (use-package json-mode
     :mode "\\.json\\'"
+    :ensure t)
+  (use-package yaml-mode
+    :mode "\\.yaml\\'"
     :ensure t)
 #+END_SRC
 * Latex
