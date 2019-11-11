@@ -147,7 +147,7 @@
       "gm" '(magit-status :which-key "magit")
       "gg" '(gist-list :which-key "list gists")
       "gc" '(gist-region-or-buffer :which-key "create gist")
-      "gc" '(gist-region-or-buffer-private :which-key "create private gist")
+      "gC" '(gist-region-or-buffer-private :which-key "create private gist")
       "gR" '(write-file :which-key "rename gist")
 
       ;; help
