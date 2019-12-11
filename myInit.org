@@ -27,36 +27,37 @@
 #+END_SRC
 * EVIL
 #+BEGIN_SRC emacs-lisp
-(setq inhibit-startup-screen t)
-(use-package evil
-  :ensure t
-  :config
-  (evil-mode +1))
+  (setq inhibit-startup-screen t)
+  (use-package evil
+    :ensure t
+    :config
+    (evil-mode +1))
  
-(fset 'yes-or-no-p 'y-or-n-p)
+  (fset 'yes-or-no-p 'y-or-n-p)
 
-;; Set exec path from shell
-(use-package exec-path-from-shell :ensure t
-  :demand
-  :config
-  (exec-path-from-shell-initialize))
+  ;; Set exec path from shell
+  (use-package exec-path-from-shell :ensure t
+    :demand
+    :config
+    (exec-path-from-shell-initialize)
+    (exec-path-from-shell-copy-env "LANG"))
 
-(use-package org-bullets
-  :ensure t
-  :config
-  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+  (use-package org-bullets
+    :ensure t
+    :config
+    (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
 
 
-(use-package winum ; window numbering
-  :ensure t
-  :config
-  (winum-mode))
+  (use-package winum ; window numbering
+    :ensure t
+    :config
+    (winum-mode))
 
-(use-package which-key
-  :ensure t
-  :config
-  (which-key-mode)
-  (setq which-key-idle-delay 0)) ; show keybinding functions
+  (use-package which-key
+    :ensure t
+    :config
+    (which-key-mode)
+    (setq which-key-idle-delay 0)) ; show keybinding functions
 
 #+END_SRC
 
