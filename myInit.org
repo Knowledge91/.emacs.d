@@ -63,175 +63,181 @@
 
 * Keybinding
 #+BEGIN_SRC emacs-lisp
-    (defun kill-other-buffers ()
-      "Kill all other buffers."
-      (interactive)
-      (mapc 'kill-buffer 
-	    (delq (current-buffer) 
-		  (remove-if-not 'buffer-file-name (buffer-list)))))
-    (defun delete-this-buffer ()
-      "Kill current buffer."
-      (interactive)
-      (kill-buffer (current-buffer)))
-    (defun delete-if-file ()
-      "Delete file and kill buffer."
-      (interactive)
-      (if (buffer-file-name)
-	  (delete-file (buffer-file-name))
-	  (delete-this-buffer)
-	))
-    ;; source: http://steve.yegge.googlepages.com/my-dot-emacs-file
-    (defun rename-file-and-buffer (new-name)
-      "Renames both current buffer and file it's visiting to NEW-NAME."
-      (interactive "sNew name: ")
-      (let ((name (buffer-name))
-	    (filename (buffer-file-name)))
-	(if (not filename)
+  (defun kill-other-buffers ()
+    "Kill all other buffers."
+    (interactive)
+    (mapc 'kill-buffer 
+	  (delq (current-buffer) 
+		(remove-if-not 'buffer-file-name (buffer-list)))))
+  (defun delete-this-buffer ()
+    "Kill current buffer."
+    (interactive)
+    (kill-buffer (current-buffer)))
+  (defun delete-if-file ()
+    "Delete file and kill buffer."
+    (interactive)
+    (if (buffer-file-name)
+	(delete-file (buffer-file-name))
+	(delete-this-buffer)
+      ))
+  ;; source: http://steve.yegge.googlepages.com/my-dot-emacs-file
+  (defun rename-file-and-buffer (new-name)
+    "Renames both current buffer and file it's visiting to NEW-NAME."
+    (interactive "sNew name: ")
+    (let ((name (buffer-name))
+	  (filename (buffer-file-name)))
+      (if (not filename)
 
-	(message "Buffer '%s' is not visiting a file!" name)
-	  (if (get-buffer new-name)
-	      (message "A buffer named '%s' already exists!" new-name)
-	    (progn
-	      (rename-file filename new-name 1)
-	      (rename-buffer new-name)
-	      (set-visited-file-name new-name)
-	      (set-buffer-modified-p nil))))))
-    (use-package general ; keybindings
-      :ensure t
-      :config
-      (general-define-key
-	:states '(normal visual insert emacs)
-	:prefix "SPC"
-	:non-normal-prefix "C-SPC"
+      (message "Buffer '%s' is not visiting a file!" name)
+	(if (get-buffer new-name)
+	    (message "A buffer named '%s' already exists!" new-name)
+	  (progn
+	    (rename-file filename new-name 1)
+	    (rename-buffer new-name)
+	    (set-visited-file-name new-name)
+	    (set-buffer-modified-p nil))))))
+  (use-package general ; keybindings
+    :ensure t
+    :config
+    (general-define-key
+      :states '(normal visual insert emacs)
+      :prefix "SPC"
+      :non-normal-prefix "C-SPC"
 
-	"TAB" '(mode-line-other-buffer :which-key "prev buffer")
+      "TAB" '(mode-line-other-buffer :which-key "prev buffer")
 
-	;; applications
-	"a" '(:which-key "applications")
-	"ad" '(deer :which-key "deer")
-	"ar" '(ranger :which-key "ranger")
+      ;; applications
+      "a" '(:which-key "applications")
+      "ad" '(deer :which-key "deer")
+      "ar" '(ranger :which-key "ranger")
 
-	;; debug
-	"d" '(:wich-key "debug")
-	"dd" '(dap-debug :which-key "start")
-	"dj" '(dap-next :which-key "next")
-	"db" '(dap-breakpoint-toggle :which-key "breakpoint")
+      ;; debug
+      "d" '(:wich-key "debug")
+      "dd" '(dap-debug :which-key "start")
+      "dj" '(dap-next :which-key "next")
+      "db" '(dap-breakpoint-toggle :which-key "breakpoint")
 
-	;; files
-	"f" '(:which-key "files")
-	"fc" '(copy-file :which-key "copy")
-	"ff" '(helm-find-files :which-key "find files")
-	"fs" '(save-buffer :which-key "save file")
-	"fd" '(delete-if-file :which-key "delete file")
-	"fR" '(rename-file-and-buffer :which-key "rename file")
+      ;; files
+      "f" '(:which-key "files")
+      "fc" '(copy-file :which-key "copy")
+      "ff" '(helm-find-files :which-key "find files")
+      "fs" '(save-buffer :which-key "save file")
+      "fd" '(delete-if-file :which-key "delete file")
+      "fR" '(rename-file-and-buffer :which-key "rename file")
 
-	;; window
-	"w" '(:which-key "window")
-	"wd" '((lambda () (interactive) (delete-window) (balance-windows)) :which-key "delete window")
-	"wv" '((lambda () (interactive) (split-window-horizontally) (balance-windows)) :which-key "vertical split")
-	"wV" '((lambda () (interactive) (split-window-horizontally) (other-window 1) (balance-windows)) :which-key "vertical split and focus")
-	"1" '((lambda () (interactive) (winum-select-window-1)) :which-key "select first window")
-	"2" '((lambda () (interactive) (winum-select-window-2)) :which-key "select second window")
-	"3" '((lambda () (interactive) (winum-select-window-3)) :which-key "select third window")
-	"4" '((lambda () (interactive) (winum-select-window-4)) :which-key "select fourth window")
+      ;; window
+      "w" '(:which-key "window")
+      "wd" '((lambda () (interactive) (delete-window) (balance-windows)) :which-key "delete window")
+      "wv" '((lambda () (interactive) (split-window-horizontally) (balance-windows)) :which-key "vertical split")
+      "wV" '((lambda () (interactive) (split-window-horizontally) (other-window 1) (balance-windows)) :which-key "vertical split and focus")
+      "1" '((lambda () (interactive) (winum-select-window-1)) :which-key "select first window")
+      "2" '((lambda () (interactive) (winum-select-window-2)) :which-key "select second window")
+      "3" '((lambda () (interactive) (winum-select-window-3)) :which-key "select third window")
+      "4" '((lambda () (interactive) (winum-select-window-4)) :which-key "select fourth window")
 
-	;; buffer
-	"b" '(:which-key "buffer")
-	"bb" '(switch-to-buffer :which-key "list")
-	"bd" '(delete-this-buffer :wich-key "kill")
-	"bD" '(kill-other-buffers :which-key "kill other buffers")
-	"br" '(rename-buffer :which-key "rename")
+      ;; buffer
+      "b" '(:which-key "buffer")
+      "bb" '(switch-to-buffer :which-key "list")
+      "bd" '(delete-this-buffer :wich-key "kill")
+      "bD" '(kill-other-buffers :which-key "kill other buffers")
+      "br" '(rename-buffer :which-key "rename")
 
-	;; project
-	"p" '(:which-key "project")
-	"pc" '(projectile-compile-project :which-key "compile")
-	"pd" '(projectile-remove-known-project :which-key "delete project")
-	"pf" '(helm-projectile-find-file :which-key "find file")
-	"pi" '(projectile-invalidate-cache :which-key "clear cache")
-	"pn" '(neotree-toggle :which-key "Neotree")
-	"pp" '(helm-projectile-switch-project :which-key "switch project")
-	"pr" '(projectile-run-project :which-key "run")
-	"pt" '(projectile-test-project :which-key "test")
-	"ps" '(:which-key "search")
-	"psg" '(projectile-grep :which-key "grep")
+      ;; project
+      "p" '(:which-key "project")
+      "pc" '(projectile-compile-project :which-key "compile")
+      "pd" '(projectile-remove-known-project :which-key "delete project")
+      "pf" '(helm-projectile-find-file :which-key "find file")
+      "pi" '(projectile-invalidate-cache :which-key "clear cache")
+      "pn" '(neotree-toggle :which-key "Neotree")
+      "pp" '(helm-projectile-switch-project :which-key "switch project")
+      "pr" '(projectile-run-project :which-key "run")
+      "pt" '(projectile-test-project :which-key "test")
+      "ps" '(:which-key "search")
+      "psg" '(projectile-grep :which-key "grep")
 
-	;; git
-	"g" '(:which-key "git")
-	"gm" '(magit-status :which-key "magit")
-	"gg" '(gist-list :which-key "list gists")
-	"gc" '(gist-region-or-buffer :which-key "create gist")
-	"gC" '(gist-region-or-buffer-private :which-key "create private gist")
-	"gR" '(write-file :which-key "rename gist")
+      ;; git
+      "g" '(:which-key "git")
+      "gm" '(magit-status :which-key "magit")
+      "gg" '(gist-list :which-key "list gists")
+      "gc" '(gist-region-or-buffer :which-key "create gist")
+      "gC" '(gist-region-or-buffer-private :which-key "create private gist")
+      "gR" '(write-file :which-key "rename gist")
 
-	;; help
-	"h" '(:which-key "help")
-	"hh" '(info :which-key "help")
-	"hf" '(describe-function :which-key "describe function")
-	"hv" '(describe-variable :which-key "describe variable")
-	"hm" '(describe-mode :which-key "describe mode")
-	"hk" '(describe-key :which-key "describe key")
+      ;; help
+      "h" '(:which-key "help")
+      "hh" '(info :which-key "help")
+      "hf" '(describe-function :which-key "describe function")
+      "hv" '(describe-variable :which-key "describe variable")
+      "hm" '(describe-mode :which-key "describe mode")
+      "hk" '(describe-key :which-key "describe key")
 
-	;; insert
-	"i" '(:which-key "insert")
-	"ic" '(insert-char :wich-key "character")
+      ;; insert
+      "i" '(:which-key "insert")
+      "ic" '(insert-char :wich-key "character")
 
-	;; jupyter
-	"j" '(:which-key "jupyter")
-	"jl" '(ein:notebooklist-open :which-key "open notebooklist")
-	"js" '(ein:jupyter-server-start :which-key "start jupyter server")
-	"jq" '(ein:jupyter-server-stop :which-key "stop jupyter server")
+      ;; jupyter
+      "j" '(:which-key "jupyter")
+      "jl" '(ein:notebooklist-open :which-key "open notebooklist")
+      "js" '(ein:jupyter-server-start :which-key "start jupyter server")
+      "jq" '(ein:jupyter-server-stop :which-key "stop jupyter server")
 
-	;; error
-	"e" '(:which-key "error")
-	"el" '(flycheck-list-errors :which-key "list errors")
+      ;; error
+      "e" '(:which-key "error")
+      "el" '(flycheck-list-errors :which-key "list errors")
 
-	;; yasnippet
-	"y" '(:which-key "yasnippet")
-	"yn" '(yas-new-snippet :which-key "new snippet")
-	"ye" '(yas-visit-snippet-file :which-key "edit snippet")
+      ;; yasnippet
+      "y" '(:which-key "yasnippet")
+      "yn" '(yas-new-snippet :which-key "new snippet")
+      "ye" '(yas-visit-snippet-file :which-key "edit snippet")
 
-	;; emacs
-	"q" '(:which-key "emacs")
-	"qe" '(eval-expression :which-key "eval")
-	"qq" '(save-buffers-kill-terminal :which-key "close")
-	"ql" '(command-log-mode :which-key "log commands")
+      ;; emacs
+      "q" '(:which-key "emacs")
+      "qe" '(eval-expression :which-key "eval")
+      "qq" '(save-buffers-kill-terminal :which-key "close")
+      "ql" '(command-log-mode :which-key "log commands")
 
-	;; shell
-	"'" '((lambda () (interactive) (ansi-term "/usr/local/bin/zsh")) :which-key "shell")
-	";" '(comment-dwim :which-key "un/comment")))
+      ;; shell
+      "'" '((lambda () (interactive) (ansi-term "/usr/local/bin/zsh")) :which-key "shell")
+      ";" '(comment-dwim :which-key "un/comment")))
 
-    (use-package solarized-theme
-      :ensure t
-      :config
-      (load-theme 'solarized-dark t))
+  (use-package solarized-theme
+    :ensure t
+    :config
+    (load-theme 'solarized-dark t))
 
-    (use-package ranger :ensure t)
+  (use-package ranger :ensure t)
 
-    (use-package flycheck :ensure t)
+  (use-package flycheck :ensure t)
 
-    (use-package helm
-      :ensure t
-      :config
-      (helm-mode 1)
-      (define-key helm-map (kbd "TAB") #'helm-execute-persistent-action))
-
-
-    ;; Set Super Key to Command
-    (setq ns-command-modifier 'super)
+  (use-package helm
+    :ensure t
+    :config
+    (helm-mode 1)
+    (define-key helm-map (kbd "TAB") #'helm-execute-persistent-action))
 
 
-    (use-package shackle ; Helm window always bottom
-      :ensure t
-      :config
-      (shackle-mode +1)
-      (setq shackle-rules '(("\\`\\*helm.*?\\*\\'" :regexp t :align t :ratio 0.4))))
+  ;; Set Super Key to Command
+  (setq ns-command-modifier 'super)
 
-    (use-package neotree :ensure t)
 
-    (use-package pdf-tools
-      :ensure t
-      :config
-      (pdf-tools-install))
+  (use-package shackle ; Helm window always bottom
+    :ensure t
+    :config
+    (shackle-mode +1)
+    (setq shackle-rules '(("\\`\\*helm.*?\\*\\'" :regexp t :align t :ratio 0.4))))
+
+  (use-package neotree :ensure t)
+
+  (use-package pdf-tools
+    :ensure t
+    :config
+    (pdf-tools-install)
+    (evil-set-initial-state 'pdf-view-mode 'normal)
+    :general( 
+      :states 'normal
+      :keymaps 'pdf-view-mode-map
+      "j" 'pdf-view-next-line-or-next-page
+      "k" 'pdf-view-previous-line-or-previous-page))
 #+END_SRC
 
 * Projectile
