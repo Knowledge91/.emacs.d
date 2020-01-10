@@ -298,7 +298,7 @@
 #+BEGIN_SRC emacs-lisp
 (use-package rjsx-mode
   :ensure t
-  :mode ("\\.tsx\\'" . rjsx-mode))
+  :mode ("\\.\\(jsx\\|tsx\\)\\'" . rjsx-mode))
 
 ;; (load (expand-file-name "./git/init.el" user-emacs-directory))
 ;; (load (expand-file-name "./lisp/init.el" user-emacs-directory))
