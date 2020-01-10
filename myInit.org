@@ -295,20 +295,13 @@
 #+END_SRC
 
 ** React
-#+BEGIN_SRC
+#+BEGIN_SRC emacs-lisp
 (use-package rjsx-mode
   :ensure t
-  :mode "\\.jsx\\'"
-  :config
-  (add-hook 'before-save-hook #'prettier)
-  (add-hook 'rjsx-mode-hook 'flycheck-mode))
+  :mode ("\\.tsx\\'" . rjsx-mode))
 
-
-(setq company-tooltip-align-annotations t)
-
-
-(load (expand-file-name "./git/init.el" user-emacs-directory))
-(load (expand-file-name "./lisp/init.el" user-emacs-directory))
+;; (load (expand-file-name "./git/init.el" user-emacs-directory))
+;; (load (expand-file-name "./lisp/init.el" user-emacs-directory))
 ;; (load (expand-file-name "./eshell.el" user-emacs-directory))
 
 
