@@ -2,16 +2,16 @@
 
 * General
 #+BEGIN_SRC emacs-lisp
-    ;; (toggle-frame-fullscreen)
-    (setq gc-cons-threshold (* 800000 100))
-    (setq-default fill-column 80)
-    (column-number-mode 1)
-    (setq package-check-signature nil)
-    (use-package format-all 
-      :ensure t
-      :hook ((web-mode typescript-mode json-mode python-mode js-mode css-mode) . format-all-mode))
-    (eval-after-load "term"
-      '(define-key term-raw-map (kbd "C-c C-y") 'term-paste))
+  ;; (toggle-frame-fullscreen)
+  (setq gc-cons-threshold (* 800000 100))
+  (setq-default fill-column 80)
+  (column-number-mode 1)
+  (setq package-check-signature nil)
+  (use-package format-all 
+    :ensure t
+    :hook ((web-mode typescript-mode json-mode python-mode js-mode css-mode c++-mode ) . format-all-mode))
+  (eval-after-load "term"
+    '(define-key term-raw-map (kbd "C-c C-y") 'term-paste))
 
 
 #+END_SRC
@@ -364,7 +364,7 @@
 #+BEGIN_SRC emacs-lisp
      (use-package lsp-mode
        :ensure t
-       :hook ((dart-mode . lsp) (python-mode . lsp) (c++-mode . lsp) (web-mode . lsp) (typescript-mode . lsp) (css-mode . lsp) (TeX-mode . lsp))
+       :hook ((dart-mode . lsp) (python-mode . lsp) (c++-mode . lsp) (web-mode . lsp) (typescript-mode . lsp) (css-mode . lsp) (TeX-mode . lsp) (rjsx-mode . lsp))
        :commands lsp
        :config
        (setq lsp-prefer-flymake nil))

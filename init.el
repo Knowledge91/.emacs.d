@@ -34,7 +34,8 @@
  '(package-selected-packages
    '(php-mode yaml-mode command-log-mode format-all format-all-the-code dap-lldb dap-mode pyvenv ein lsp-ui clang-format yasnippet-snippets cmake-mode ccls magit platformio-mode helm-lsp company-lsp yasnippet flutter-l10n-flycheck flutter dart-mode lsp-mode use-package-ensure-system-package markdown-mode gist json-mode auctex-lua org-bullets typescript evil-collection neotree auctex-latexmk ranger evil-ranger zenburn-theme solarized-theme solarized-dark prettier-js prettier winum emacs-winum window-numbering evil-magit general which-key shackle helm-projectile exec-path-from-shell tide web-mode rjsx-mode use-package flycheck helm material-theme elpy evil-leader evil))
  '(safe-local-variable-values
-   '((projectile-project-test-cmd . "./build/test")
+   '((projectile-project-run-cmd . "ionic serve")
+     (projectile-project-test-cmd . "./build/test")
      (projectile-project-run-cmd . "./build/main")
      (projectile-project-run-cmd . ".build/main")
      (projectile-project-compilation-cmd . "cd ./build && cmake .. && make")
