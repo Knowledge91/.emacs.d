@@ -9,7 +9,7 @@
   (setq package-check-signature nil)
   (use-package format-all 
     :ensure t
-    :hook ((web-mode typescript-mode json-mode python-mode js-mode css-mode c++-mode ) . format-all-mode))
+    :hook ((web-mode typescript-mode json-mode python-mode js-mode css-mode c++-mode lisp-mode) . format-all-mode))
   (eval-after-load "term"
     '(define-key term-raw-map (kbd "C-c C-y") 'term-paste))
 
@@ -313,6 +313,11 @@
 
 #+END_SRC
 
+** Vue
+#+BEGIN_SRC emacs-lisp
+  (use-package vue-mode
+    :ensure t)
+#+END_SRC
 * JSON / YAML
 #+BEGIN_SRC emacs-lisp
   (use-package json-mode
